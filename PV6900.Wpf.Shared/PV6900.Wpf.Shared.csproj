@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Prism.Wpf" Version="8.0.0.1850-pre" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\IT9000.Wpf.Shared\IT9000.Wpf.Shared.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,408 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v5.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v5.0": {
+      "PV6900.Wpf/1.0.0": {
+        "dependencies": {
+          "MaterialDesignThemes": "4.0.0-ci2156",
+          "PV6900.Wpf.Shared": "1.0.0",
+          "Prism.Wpf": "8.0.0.1850-pre",
+          "Raccoon.DevKits.Wpf.DependencyInjection": "1.2.0",
+          "Syncfusion.SfChart.WPF": "18.3.0.40",
+          "Syncfusion.Shared.WPF": "18.3.0.40",
+          "Syncfusion.Tools.WPF": "18.3.0.40"
+        },
+        "runtime": {
+          "PV6900.Wpf.dll": {}
+        }
+      },
+      "MaterialDesignColors/2.0.0-ci2156": {
+        "runtime": {
+          "lib/netcoreapp3.1/MaterialDesignColors.dll": {
+            "assemblyVersion": "2.0.0.2156",
+            "fileVersion": "2.0.0.2156"
+          }
+        }
+      },
+      "MaterialDesignThemes/4.0.0-ci2156": {
+        "dependencies": {
+          "MaterialDesignColors": "2.0.0-ci2156"
+        },
+        "runtime": {
+          "lib/netcoreapp3.1/MaterialDesignThemes.Wpf.dll": {
+            "assemblyVersion": "4.0.0.2156",
+            "fileVersion": "4.0.0.2156"
+          }
+        }
+      },
+      "Microsoft.Extensions.Configuration/5.0.0-rc.2.20475.5": {
+        "dependencies": {
+          "Microsoft.Extensions.Configuration.Abstractions": "5.0.0-rc.2.20475.5",
+          "Microsoft.Extensions.Primitives": "5.0.0-rc.2.20475.5"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.Extensions.Configuration.dll": {
+            "assemblyVersion": "5.0.0.0",
+            "fileVersion": "5.0.20.47505"
+          }
+        }
+      },
+      "Microsoft.Extensions.Configuration.Abstractions/5.0.0-rc.2.20475.5": {
+        "dependencies": {
+          "Microsoft.Extensions.Primitives": "5.0.0-rc.2.20475.5"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.Extensions.Configuration.Abstractions.dll": {
+            "assemblyVersion": "5.0.0.0",
+            "fileVersion": "5.0.20.47505"
+          }
+        }
+      },
+      "Microsoft.Extensions.Configuration.FileExtensions/5.0.0-rc.2.20475.5": {
+        "dependencies": {
+          "Microsoft.Extensions.Configuration": "5.0.0-rc.2.20475.5",
+          "Microsoft.Extensions.Configuration.Abstractions": "5.0.0-rc.2.20475.5",
+          "Microsoft.Extensions.FileProviders.Abstractions": "5.0.0-rc.2.20475.5",
+          "Microsoft.Extensions.FileProviders.Physical": "5.0.0-rc.2.20475.5",
+          "Microsoft.Extensions.Primitives": "5.0.0-rc.2.20475.5"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.Extensions.Configuration.FileExtensions.dll": {
+            "assemblyVersion": "5.0.0.0",
+            "fileVersion": "5.0.20.47505"
+          }
+        }
+      },
+      "Microsoft.Extensions.Configuration.Json/5.0.0-rc.2.20475.5": {
+        "dependencies": {
+          "Microsoft.Extensions.Configuration": "5.0.0-rc.2.20475.5",
+          "Microsoft.Extensions.Configuration.Abstractions": "5.0.0-rc.2.20475.5",
+          "Microsoft.Extensions.Configuration.FileExtensions": "5.0.0-rc.2.20475.5",
+          "Microsoft.Extensions.FileProviders.Abstractions": "5.0.0-rc.2.20475.5"
+        },
+        "runtime": {
+          "lib/netstandard2.1/Microsoft.Extensions.Configuration.Json.dll": {
+            "assemblyVersion": "5.0.0.0",
+            "fileVersion": "5.0.20.47505"
+          }
+        }
+      },
+      "Microsoft.Extensions.DependencyInjection/5.0.0-rc.2.20475.5": {
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "5.0.0-rc.2.20475.5"
+        },
+        "runtime": {
+          "lib/net5.0/Microsoft.Extensions.DependencyInjection.dll": {
+            "assemblyVersion": "5.0.0.0",
+            "fileVersion": "5.0.20.47505"
+          }
+        }
+      },
+      "Microsoft.Extensions.DependencyInjection.Abstractions/5.0.0-rc.2.20475.5": {
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll": {
+            "assemblyVersion": "5.0.0.0",
+            "fileVersion": "5.0.20.47505"
+          }
+        }
+      },
+      "Microsoft.Extensions.FileProviders.Abstractions/5.0.0-rc.2.20475.5": {
+        "dependencies": {
+          "Microsoft.Extensions.Primitives": "5.0.0-rc.2.20475.5"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.Extensions.FileProviders.Abstractions.dll": {
+            "assemblyVersion": "5.0.0.0",
+            "fileVersion": "5.0.20.47505"
+          }
+        }
+      },
+      "Microsoft.Extensions.FileProviders.Physical/5.0.0-rc.2.20475.5": {
+        "dependencies": {
+          "Microsoft.Extensions.FileProviders.Abstractions": "5.0.0-rc.2.20475.5",
+          "Microsoft.Extensions.FileSystemGlobbing": "5.0.0-rc.2.20475.5",
+          "Microsoft.Extensions.Primitives": "5.0.0-rc.2.20475.5"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.Extensions.FileProviders.Physical.dll": {
+            "assemblyVersion": "5.0.0.0",
+            "fileVersion": "5.0.20.47505"
+          }
+        }
+      },
+      "Microsoft.Extensions.FileSystemGlobbing/5.0.0-rc.2.20475.5": {
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.Extensions.FileSystemGlobbing.dll": {
+            "assemblyVersion": "5.0.0.0",
+            "fileVersion": "5.0.20.47505"
+          }
+        }
+      },
+      "Microsoft.Extensions.Primitives/5.0.0-rc.2.20475.5": {
+        "runtime": {
+          "lib/netcoreapp3.0/Microsoft.Extensions.Primitives.dll": {
+            "assemblyVersion": "5.0.0.0",
+            "fileVersion": "5.0.20.47505"
+          }
+        }
+      },
+      "Microsoft.Xaml.Behaviors.Wpf/1.1.3": {
+        "runtime": {
+          "lib/netcoreapp3.0/Microsoft.Xaml.Behaviors.dll": {
+            "assemblyVersion": "1.1.0.0",
+            "fileVersion": "1.1.3.43761"
+          }
+        }
+      },
+      "Prism.Core/8.0.0.1850-pre": {
+        "runtime": {
+          "lib/netstandard2.0/Prism.dll": {
+            "assemblyVersion": "8.0.0.1850",
+            "fileVersion": "8.0.0.1850"
+          }
+        }
+      },
+      "Prism.Wpf/8.0.0.1850-pre": {
+        "dependencies": {
+          "Microsoft.Xaml.Behaviors.Wpf": "1.1.3",
+          "Prism.Core": "8.0.0.1850-pre"
+        },
+        "runtime": {
+          "lib/netcoreapp3.1/Prism.Wpf.dll": {
+            "assemblyVersion": "8.0.0.1850",
+            "fileVersion": "8.0.0.1850"
+          }
+        }
+      },
+      "Raccoon.DevKits.Wpf.DependencyInjection/1.2.0": {
+        "dependencies": {
+          "Microsoft.Extensions.Configuration.Json": "5.0.0-rc.2.20475.5",
+          "Microsoft.Extensions.DependencyInjection": "5.0.0-rc.2.20475.5"
+        },
+        "runtime": {
+          "lib/net5.0-windows7.0/Raccoon.DevKits.Wpf.DependencyInjection.dll": {
+            "assemblyVersion": "1.2.0.0",
+            "fileVersion": "1.2.0.0"
+          }
+        }
+      },
+      "Syncfusion.Licensing/18.3.0.40": {
+        "runtime": {
+          "lib/netcoreapp5.0/Syncfusion.Licensing.dll": {
+            "assemblyVersion": "18.3.0.40",
+            "fileVersion": "18.3.0.40"
+          }
+        }
+      },
+      "Syncfusion.SfChart.WPF/18.3.0.40": {
+        "dependencies": {
+          "Syncfusion.Licensing": "18.3.0.40"
+        },
+        "runtime": {
+          "lib/netcoreapp5.0/Syncfusion.SfChart.WPF.dll": {
+            "assemblyVersion": "18.3500.0.40",
+            "fileVersion": "18.3500.0.40"
+          }
+        }
+      },
+      "Syncfusion.Shared.WPF/18.3.0.40": {
+        "dependencies": {
+          "Syncfusion.Licensing": "18.3.0.40"
+        },
+        "runtime": {
+          "lib/netcoreapp5.0/Syncfusion.Shared.WPF.dll": {
+            "assemblyVersion": "18.3500.0.40",
+            "fileVersion": "18.3500.0.40"
+          }
+        }
+      },
+      "Syncfusion.Tools.WPF/18.3.0.40": {
+        "dependencies": {
+          "Syncfusion.Licensing": "18.3.0.40",
+          "Syncfusion.Shared.WPF": "18.3.0.40"
+        },
+        "runtime": {
+          "lib/netcoreapp5.0/Syncfusion.Tools.WPF.dll": {
+            "assemblyVersion": "18.3500.0.40",
+            "fileVersion": "18.3500.0.40"
+          }
+        }
+      },
+      "IT9000.Wpf.Shared/1.0.0": {
+        "runtime": {
+          "IT9000.Wpf.Shared.dll": {}
+        }
+      },
+      "PV6900.Wpf.Shared/1.0.0": {
+        "dependencies": {
+          "IT9000.Wpf.Shared": "1.0.0",
+          "Prism.Wpf": "8.0.0.1850-pre"
+        },
+        "runtime": {
+          "PV6900.Wpf.Shared.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "PV6900.Wpf/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "MaterialDesignColors/2.0.0-ci2156": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-PCTGTiKYp/QfNFY39BSmXOJPUkzVF53nmDmvchidFPpYEVuJMziQ5NnQjmYrWj0krhqFDVKwb7cHLPyBY8Dz2w==",
+      "path": "materialdesigncolors/2.0.0-ci2156",
+      "hashPath": "materialdesigncolors.2.0.0-ci2156.nupkg.sha512"
+    },
+    "MaterialDesignThemes/4.0.0-ci2156": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-0t1E3HRrCett3Lf9OXz+Phem1T9rLNKqxKfLyGXeThYaoOg12ejOSUL2f12gT26xU3hEJjir/fz4ranYuusenw==",
+      "path": "materialdesignthemes/4.0.0-ci2156",
+      "hashPath": "materialdesignthemes.4.0.0-ci2156.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Configuration/5.0.0-rc.2.20475.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-uIXKAkDWN5YrW9SCOuw0l76y/NXwZkkT4m4j5G1mPQtB/tWnZnFbwNoQtrJabfxgXZ2wzIHBrDdWx8pY5DXL5Q==",
+      "path": "microsoft.extensions.configuration/5.0.0-rc.2.20475.5",
+      "hashPath": "microsoft.extensions.configuration.5.0.0-rc.2.20475.5.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Configuration.Abstractions/5.0.0-rc.2.20475.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-jHzOsAQvgt18rRteAjLjed6Q1Z0JKtto+2hcQOddAEcXp6bgBqZt0MpLX808mrIUqYw+MVm7rJqPb+d9DCgvlg==",
+      "path": "microsoft.extensions.configuration.abstractions/5.0.0-rc.2.20475.5",
+      "hashPath": "microsoft.extensions.configuration.abstractions.5.0.0-rc.2.20475.5.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Configuration.FileExtensions/5.0.0-rc.2.20475.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-iiOVv7qEVgf76xfFfeowgP2KerZz5jXgFi3TqeOK82Gmeb7kAIYBwhimrSQpauCmSNoNC23m3aHhPcdMiyYR8Q==",
+      "path": "microsoft.extensions.configuration.fileextensions/5.0.0-rc.2.20475.5",
+      "hashPath": "microsoft.extensions.configuration.fileextensions.5.0.0-rc.2.20475.5.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Configuration.Json/5.0.0-rc.2.20475.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-2RkY3D3bYCDDOCiWl7fjoMiPXNzLGnngST+2scccPpxKwV46rNL5MbpoXHpK4Vrkd+hFrA7s7Nm4tUGJTwmeMw==",
+      "path": "microsoft.extensions.configuration.json/5.0.0-rc.2.20475.5",
+      "hashPath": "microsoft.extensions.configuration.json.5.0.0-rc.2.20475.5.nupkg.sha512"
+    },
+    "Microsoft.Extensions.DependencyInjection/5.0.0-rc.2.20475.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-FOEZPxuU2cdWHKVXRadpuNBMLmY7dy/goYKs80liSDuVHgO8dhS3gUDYvO5PlRq7HXLjyk+CSzyh9pHxTWFosw==",
+      "path": "microsoft.extensions.dependencyinjection/5.0.0-rc.2.20475.5",
+      "hashPath": "microsoft.extensions.dependencyinjection.5.0.0-rc.2.20475.5.nupkg.sha512"
+    },
+    "Microsoft.Extensions.DependencyInjection.Abstractions/5.0.0-rc.2.20475.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-le4g5HXKXq7nY/la+32poSbukp6ALj1tJfJtsLFtcE3oclqdWI58l8NbCIC+YidoNFY3L4FloRQQE+ivuqUEGw==",
+      "path": "microsoft.extensions.dependencyinjection.abstractions/5.0.0-rc.2.20475.5",
+      "hashPath": "microsoft.extensions.dependencyinjection.abstractions.5.0.0-rc.2.20475.5.nupkg.sha512"
+    },
+    "Microsoft.Extensions.FileProviders.Abstractions/5.0.0-rc.2.20475.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-IuAxklWA7rtUIgneaISg5/0a5i3BDqujKSYX+UnXOn8fASzWECN4ZJFFmg7dJ3GnEb7ABLm4QljsvekJ/WVK6Q==",
+      "path": "microsoft.extensions.fileproviders.abstractions/5.0.0-rc.2.20475.5",
+      "hashPath": "microsoft.extensions.fileproviders.abstractions.5.0.0-rc.2.20475.5.nupkg.sha512"
+    },
+    "Microsoft.Extensions.FileProviders.Physical/5.0.0-rc.2.20475.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-BdODuPZafmvi0ys/AWDzTzz6q3l4XMNchqvyWYheGnI3cr8ASGK1i/gC3il+gNZr/vpvDza/WAHi53RzodDAlg==",
+      "path": "microsoft.extensions.fileproviders.physical/5.0.0-rc.2.20475.5",
+      "hashPath": "microsoft.extensions.fileproviders.physical.5.0.0-rc.2.20475.5.nupkg.sha512"
+    },
+    "Microsoft.Extensions.FileSystemGlobbing/5.0.0-rc.2.20475.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-MAKbfbrZd33Rb1ZdrtGi+uc/pKg/CC5VlZxNoZ5KMmHKUTEog6zX9GiSapBAJbWBqnw1Ottf2/rOuOt0Koq9nQ==",
+      "path": "microsoft.extensions.filesystemglobbing/5.0.0-rc.2.20475.5",
+      "hashPath": "microsoft.extensions.filesystemglobbing.5.0.0-rc.2.20475.5.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Primitives/5.0.0-rc.2.20475.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-duohECwfJCGfbCEZRWvDBRkRPufCrBqbZx/YN7QzmniNj7nCRvii3DNRX4rzY3kOhAyvxpXVuKA4YbjOFPs41w==",
+      "path": "microsoft.extensions.primitives/5.0.0-rc.2.20475.5",
+      "hashPath": "microsoft.extensions.primitives.5.0.0-rc.2.20475.5.nupkg.sha512"
+    },
+    "Microsoft.Xaml.Behaviors.Wpf/1.1.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Nj5tRPkKQpIFg7HcXzV1P/1CLk1NtkoJLE0IMKCHZfKMiBWdy6TssdOUT2OHw8L4eKP65lG+OElNR3xdaeW+gQ==",
+      "path": "microsoft.xaml.behaviors.wpf/1.1.3",
+      "hashPath": "microsoft.xaml.behaviors.wpf.1.1.3.nupkg.sha512"
+    },
+    "Prism.Core/8.0.0.1850-pre": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-zjgOmnTnUpH56dpVyun/WKt33DGp0Vcd3wVTM00SImeoVuZ2nisA77iY3yta+Sb7naeFB/Ut0Ph91p3XzJi0pg==",
+      "path": "prism.core/8.0.0.1850-pre",
+      "hashPath": "prism.core.8.0.0.1850-pre.nupkg.sha512"
+    },
+    "Prism.Wpf/8.0.0.1850-pre": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-2uaB17ct7EWwzZgTy3IOuiCff4Qb+2h7/pcSJ/KOr6Oc7mkn/78OkqB+1nRtWRdBRLlOBqS5K+w0EH4v4VNvcQ==",
+      "path": "prism.wpf/8.0.0.1850-pre",
+      "hashPath": "prism.wpf.8.0.0.1850-pre.nupkg.sha512"
+    },
+    "Raccoon.DevKits.Wpf.DependencyInjection/1.2.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-vO4UWaokNLK8SQiRhFu809thS81/ic33lx12nishWOXomJaZLDqlq5Onv+DRPYPwwkQlUY5Rk3DD9PM9z4qj8g==",
+      "path": "raccoon.devkits.wpf.dependencyinjection/1.2.0",
+      "hashPath": "raccoon.devkits.wpf.dependencyinjection.1.2.0.nupkg.sha512"
+    },
+    "Syncfusion.Licensing/18.3.0.40": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Z6BnC4oOKPckbvy7U4WHklbjs2b162hEL1S+KQ1im1c2Y7GZMDiqyAp7jOEbV4aMevhHXUy2FRnbtS/b1kYHAQ==",
+      "path": "syncfusion.licensing/18.3.0.40",
+      "hashPath": "syncfusion.licensing.18.3.0.40.nupkg.sha512"
+    },
+    "Syncfusion.SfChart.WPF/18.3.0.40": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-xlRGMjaE88opmy9TTaDL3K/kugGLqWsUL53O+a0n8dCWYr5WQc3z+Dh0apQPhMDWCuS5yDBh0btgthk/pAHQNQ==",
+      "path": "syncfusion.sfchart.wpf/18.3.0.40",
+      "hashPath": "syncfusion.sfchart.wpf.18.3.0.40.nupkg.sha512"
+    },
+    "Syncfusion.Shared.WPF/18.3.0.40": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-FT75ybESVmFbCBn8GIVCJRFJyF88dSw0rG58eftesNb5bLo88wedZswwlYldHq4cyrPRWGr2ZhWGyImX2VaVJQ==",
+      "path": "syncfusion.shared.wpf/18.3.0.40",
+      "hashPath": "syncfusion.shared.wpf.18.3.0.40.nupkg.sha512"
+    },
+    "Syncfusion.Tools.WPF/18.3.0.40": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-gVP8Ib3V6wbDWPSYA1CjZPD19zgKGF0CXFcNjfkdWryMVphOaOyxMTe3xoJDDn751Q+r5718n3ImrpnE/RsXUA==",
+      "path": "syncfusion.tools.wpf/18.3.0.40",
+      "hashPath": "syncfusion.tools.wpf.18.3.0.40.nupkg.sha512"
+    },
+    "IT9000.Wpf.Shared/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "PV6900.Wpf.Shared/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

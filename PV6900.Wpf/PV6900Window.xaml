@@ -1,0 +1,145 @@
+﻿<Window x:Class="PV6900.Wpf.PV6900Window"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PV6900.Wpf"
+        xmlns:controls="clr-namespace:PV6900.Wpf.Controls"
+        xmlns:it9000sharedservices="clr-namespace:IT9000.Wpf.Shared.Services;assembly=IT9000.Wpf.Shared"
+        xmlns:pv6900sharedmodels="clr-namespace:PV6900.Wpf.Shared.Models;assembly=PV6900.Wpf.Shared"
+        xmlns:pv6900sharedservices="clr-namespace:PV6900.Wpf.Shared.Services;assembly=PV6900.Wpf.Shared"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal" 
+        TextOptions.TextRenderingMode="Auto"        
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}"
+        
+        
+        mc:Ignorable="d"
+        Title="PV6900Window" Height="400" Width="800">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="PV6900ResourceDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+
+
+
+    </Window.Resources>
+
+    <Grid>
+        <Grid.Resources>
+            <it9000sharedservices:BoolNegateConverter x:Key="boolNegateConverter" />
+            <pv6900sharedservices:InnerLoopFlagBoolConverter x:Key="innerLoopFlagBoolConverter" />
+            <ObjectDataProvider MethodName="GetNames" ObjectType="{x:Type sys:Enum}" 
+                            x:Key="InnerLoopFlagEnums">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="pv6900sharedmodels:InnerLoopFlag" />
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+        </Grid.Resources>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="10*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" VerticalAlignment="Center">
+            <Menu Style="{DynamicResource MaterialDesignMenu}" Grid.Row="0"
+                Foreground="{DynamicResource PrimaryHueDarkBrush}"
+                Background="{DynamicResource MaterialDesignTextFieldBoxHoverBackground}">
+                <MenuItem Style="{DynamicResource MaterialDesignMenuItem}" Header="Start" 
+                          Command="{Binding StartMonitorCommand}"
+                          IsEnabled="{Binding InMonitor,Converter={StaticResource boolNegateConverter}}"/>
+                <MenuItem Style="{DynamicResource MaterialDesignMenuItem}" Header="Stop"
+                          Command="{Binding StopMonitorCommand}"
+                          IsEnabled="{Binding InMonitor}"
+                          />
+                <MenuItem Style="{DynamicResource MaterialDesignMenuItem}" Header="Charts"
+                    Command="{Binding ShowChartsCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}"
+                 />
+            </Menu>
+        </StackPanel>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="4*"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0" DataContext="{Binding TimeSpanGaugesVM}" VerticalAlignment="Center">
+                <controls:Gauge Header="Setting Volta  :" Value="{Binding SettingVolta,StringFormat={}{0:N2}}"/>
+                <controls:Gauge Header="Volta          :" Value="{Binding Volta,StringFormat={}{0:N2}}"/>
+                <controls:Gauge Margin="0,12,0,0" Header="Setting Ampere :" 
+                                                        Value="{Binding SettingAmpere,StringFormat={}{0:N2}}"/>
+                <controls:Gauge Header="Ampere         :" Value="{Binding Ampere,StringFormat={}{0:N2}}"/>
+            </StackPanel>
+            <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Column="1" >
+                <StackPanel  DataContext="{Binding ProgramDashboardVM}" Margin="32 4"
+                        >
+                    <DataGrid ItemsSource="{Binding ManagedProgramSteps}"
+                            CanUserAddRows="False"
+                            CanUserDeleteRows="False"
+                            AutoGenerateColumns="False"
+                            CanUserSortColumns="False"
+                            Style="{DynamicResource MaterialDesignDataGrid}"
+                            Name="DataGrid_ProgramEditor">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Volta" Binding="{Binding Volta}" Width="*"/>
+                            <DataGridTextColumn Header="Ampere" Binding="{Binding Ampere}" Width="*" />
+                            <DataGridTextColumn Header="Duration" Binding="{Binding Duration}" Width="*" />
+                            <DataGridComboBoxColumn Header="Inner loop type"  ItemsSource="{Binding Source={StaticResource InnerLoopFlagEnums}}" 
+                                                TextBinding="{Binding InnerLoopFlag}"/>
+                            <DataGridTextColumn Header="In.Loop Count" Binding="{Binding InnerLoopCount}"
+                                            IsReadOnly="{Binding InnerLoopFlag,Converter={StaticResource innerLoopFlagBoolConverter}}">
+
+                            </DataGridTextColumn>
+                            <!--<DataGridTemplateColumn Header="Inner Loop Count">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding InnerLoopCount}" 
+                                               IsEnabled="{Binding InnerLoopFlag,Converter={StaticResource innerLoopFlagBoolConverter}}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>-->
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <StackPanel Orientation="Horizontal" Margin="0,32,0,0">
+                        <Button Content="Add" Command="{Binding AddCommand}" />
+                        <Button Content="Delete" Style="{DynamicResource MaterialDesignOutlinedButton}" Margin="8,0"
+                            Command="{Binding DeleteCommand}" 
+                            CommandParameter="{Binding ElementName=DataGrid_ProgramEditor}"/>
+
+                        <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+                            <Label Content="Outer loop count:" />
+                            <TextBox Text="{Binding OuterLoopCount}" />
+                        </StackPanel>
+
+                        <Button Margin="24,0,0,0"
+                                x:Name="Button_StartRunProgram"
+                            Content="Run" Background="Green" 
+                            Command="{Binding StartCommand}"
+                            CommandParameter="{Binding ElementName=DataGrid_ProgramEditor}"
+                            IsEnabled="{Binding InRunning,Converter={StaticResource boolNegateConverter}}"
+                            />
+                        <Button Content="Stop" 
+                                x:Name="Button_StopRunProgram"
+                            Margin="8,0"
+                            Background="Red" 
+                            Command="{Binding StopCommand}"
+                            CommandParameter="{Binding ElementName=DataGrid_ProgramEditor}"
+                            IsEnabled="{Binding InRunning}"
+                            />
+                    </StackPanel>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+</Window>

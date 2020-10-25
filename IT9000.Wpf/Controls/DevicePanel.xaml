@@ -1,0 +1,49 @@
+﻿<GroupBox x:Class="IT9000.Wpf.Controls.DevicePanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:IT9000.Wpf.Controls"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" 
+             Style="{DynamicResource MaterialDesignCardGroupBox}"
+             Margin="30px"
+             Name="GroupBox_DevicePanel"
+             >
+    <GroupBox.Header>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <Label Foreground="White"
+               Content="{Binding ElementName=GroupBox_DevicePanel,Path=DeviceName}"/>
+            <materialDesign:PackIcon Kind="AccessPointNetwork" VerticalAlignment="Center"                  
+                  Foreground="{Binding RelativeSource={RelativeSource   Mode= FindAncestor,  AncestorType={x:Type local:DevicePanel}}, Path=HeaderIconBrush}"/>
+        </StackPanel>
+
+    </GroupBox.Header>
+    <StackPanel >
+        <!--<Button Content="Connect" Background="Green" Margin="0,20px" Width="180px" Style="{DynamicResource MaterialDesignRaisedDarkButton}" />
+        <Button Content="Disconnect" Background="Red" Margin="0,20px" Width="180px" Style="{DynamicResource MaterialDesignRaisedDarkButton}" />-->
+        <materialDesign:Card Margin="8px">
+            <StackPanel HorizontalAlignment="Left"
+                        Orientation="Horizontal">
+                <Label Content="Model:"/>
+                <Label Content ="{Binding ElementName=GroupBox_DevicePanel,Path=DeviceModel}"/>
+            </StackPanel>
+        </materialDesign:Card>
+
+        <materialDesign:Card Margin="8px">
+            <StackPanel HorizontalAlignment="Left"
+                        Orientation="Horizontal">
+                <Label Content="Address:"/>
+                <Label Content="{Binding ElementName=GroupBox_DevicePanel,Path=DeviceAddress}"/>
+            </StackPanel>
+        </materialDesign:Card>
+
+        <materialDesign:Card Margin="8px">
+            <StackPanel HorizontalAlignment="Left"
+                        Orientation="Horizontal">
+                <Label Content="Port Type:"/>
+                <Label Content="{Binding ElementName=GroupBox_DevicePanel,Path=PortType}"/>
+            </StackPanel>
+        </materialDesign:Card>
+    </StackPanel>
+</GroupBox>

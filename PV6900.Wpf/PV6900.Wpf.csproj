@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MaterialDesignThemes" Version="4.0.0-ci2156" />
+    <PackageReference Include="Prism.Wpf" Version="8.0.0.1850-pre" />
+    <PackageReference Include="Raccoon.DevKits.Wpf.DependencyInjection" Version="1.2.0" />
+    <PackageReference Include="Syncfusion.SfChart.WPF" Version="18.3.0.40" />
+    <PackageReference Include="Syncfusion.Shared.WPF" Version="18.3.0.40" />
+    <PackageReference Include="Syncfusion.Tools.WPF" Version="18.3.0.40" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PV6900.Wpf.Shared\PV6900.Wpf.Shared.csproj" />
+  </ItemGroup>
+
+</Project>
