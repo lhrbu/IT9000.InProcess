@@ -43,7 +43,10 @@ namespace IT9000.Wpf.Repositories
             }
             SortOfflineDeivces();
             SortOnlineDevices();
-            while(!DevicePanelMap.TryRemove(device,out _));
+            if (DevicePanelMap.ContainsKey(device))
+            {
+                while (!DevicePanelMap.TryRemove(device, out _)) ;
+            }
         }
         public void SortOfflineDeivces()
         {

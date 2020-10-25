@@ -23,14 +23,17 @@ namespace IT9000.Wpf.ViewModels
         private readonly DevicesRepository _devicesRepository;
         private readonly DevicePanelInstanceService _devicePanelInstanceService;
         private readonly PluginLoadService _pluginLoadService;
+        private readonly MultiDevicesPanelWindow _multiDevicesPanelWindow;
         public ConnectWindowVM(
             DevicesRepository devicesRepository,
             DevicePanelInstanceService devicePanelInstanceService,
-            PluginLoadService pluginLoadService)
+            PluginLoadService pluginLoadService,
+            MultiDevicesPanelWindow multiDevicesPanelWindow)
         {
             _devicesRepository = devicesRepository;
             _devicePanelInstanceService = devicePanelInstanceService;
             _pluginLoadService = pluginLoadService;
+            _multiDevicesPanelWindow = multiDevicesPanelWindow;
 
             SelectionsResetCommand = new(listBox => listBox.SelectedItem = null);
             SelectionsConnectCommand = new(SelectionsConnect);
@@ -47,8 +50,6 @@ namespace IT9000.Wpf.ViewModels
         {
             try
             {
-                MultiDevicesPanelWindow _multiDevicesPanelWindow = Application.Current.AsDIApplication()!
-                    .ServiceProvider.GetRequiredService<MultiDevicesPanelWindow>();
                 IEnumerable<Device> devices = listBox.SelectedItems.Cast<Device>()!.ToList()!;
                 foreach (Device device in devices)
                 {

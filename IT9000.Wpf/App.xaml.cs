@@ -30,11 +30,11 @@ namespace IT9000.Wpf
         {
             services.AddTransient<MainWindow>();
             services.AddTransient<ConnectWindow>();
-            //services.AddSingleton<MultiDevicesPanelWindow>();
+            services.AddSingleton<MultiDevicesPanelWindow>();
 
             services.AddTransient<MainWindowVM>();
             services.AddTransient<ConnectWindowVM>();
-            //services.AddSingleton<MultiDevicesPanelWindowVM>();
+            services.AddSingleton<MultiDevicesPanelWindowVM>();
 
             services.AddSingleton<DevicesRepository>();
             services.AddSingleton<PluginTypesRepository>();
@@ -64,8 +64,9 @@ namespace IT9000.Wpf
                     multiDevicesPanelWindow.Visibility = Visibility.Hidden;
                     e.Cancel = true;
                 };
-                Application.Current.MainWindow.Closed += (sender,e)=>Application.Current.Shutdown();
-            }catch(Exception exception)
+                Application.Current.MainWindow.Closed += (sender, e) => Application.Current.Shutdown();
+            }
+            catch(Exception exception)
             {
                 MessageBox.Show(exception.ToString(), "Error:");
             }
