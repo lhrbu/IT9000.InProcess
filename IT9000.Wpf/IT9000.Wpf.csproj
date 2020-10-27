@@ -5,9 +5,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Prism.Wpf" Version="8.0.0.1850-pre" />
-    <PackageReference Include="Raccoon.DevKits.Wpf.DependencyInjection" Version="1.1.0" />
-    <PackageReference Include="MaterialDesignThemes" Version="3.2.0" />
+    <PackageReference Include="Prism.Wpf" Version="8.0.0.1909" />
+    <PackageReference Include="Raccoon.DevKits.Wpf.DependencyInjection" Version="1.2.0" />
+    <PackageReference Include="MaterialDesignThemes" Version="4.0.0-ci2175" />
   </ItemGroup>
 
   <PropertyGroup>

@@ -6,13 +6,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace PV6900.Wpf.Services
 {
     public class DeviceMonitorService
     {
-        private readonly DeviceStorageService _deviceStorageService;
 
         private readonly IIteInteropService _iteInteropService;
         private readonly DeviceLinkService _linkService;
@@ -21,14 +21,12 @@ namespace PV6900.Wpf.Services
         private readonly DeviceSettingDataQueryService _settingDataQueryService;
 
         public DeviceMonitorService(
-            DeviceStorageService deviceStorageService,
             IIteInteropService iteInteropService,
             DeviceLinkService linkService,
             DeviceLimitsQueryService limitsQueryService,
             DeviceDataMeasureService measureService,
             DeviceSettingDataQueryService settingDataQueryService)
         {
-            _deviceStorageService = deviceStorageService;
             _iteInteropService = iteInteropService;
             _linkService = linkService;
             _limitsQueryService = limitsQueryService;
@@ -41,19 +39,21 @@ namespace PV6900.Wpf.Services
         public event EventHandler<DataMeasureEventArgs>? AfterDataMeasure;
 
         public int IntervalMS { get; init; } = 100;
-        private bool _isRequestCancellation = false;
-        public void Stop() => _isRequestCancellation = true;
-        public async Task StartAsync()
+
+        private CancellationTokenSource? _cancellationTokenSource;
+
+        public void Stop(Device device) => _cancellationTokenSource?.Cancel();
+        public async Task StartAsync(Device device)
         {
-            if (_deviceStorageService.Empty) { return; }
-            Device device = _deviceStorageService.Get()!;
+            if(_cancellationTokenSource is not null && !_cancellationTokenSource.Token.IsCancellationRequested)
+            { return; }
 
 
             if (!_linkService.TryLink(device))
             { throw new InvalidOperationException("Can't link device"); }
 
-            _isRequestCancellation=false;
-            while (!_isRequestCancellation)
+            _cancellationTokenSource = new();
+            while (!_cancellationTokenSource.Token.IsCancellationRequested)
             {
                 _iteInteropService.WaitHandle.WaitOne();
                 double settingVolta = _settingDataQueryService.GetSettingAmpereUnsafe(device);

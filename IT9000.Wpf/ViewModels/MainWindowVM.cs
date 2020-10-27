@@ -29,31 +29,25 @@ namespace IT9000.Wpf.ViewModels
             _devicesRepository = devicesRepository;
 
             foreach(Device device in _deviceDetectService.GetDevices())
-            { 
-                _devicesRepository.DeviceOffline(device);
-            }
+            { _devicesRepository.DeviceOffline(device);}
 
-            ConnectCommand = new(mainWindow =>
-            {
-                ConnectWindow connectWindow = Application.Current.AsDIApplication()!
-                        .ServiceProvider.GetRequiredService<ConnectWindow>();
-                connectWindow.Owner = mainWindow;
-                connectWindow.Show();
-                
-            });
-
-            MultiDevicesCommand = new(mainWindow =>
-            {
-                MultiDevicesPanelWindow multiDevicesPanelWindow = Application.Current.AsDIApplication()!
-                    .ServiceProvider.GetRequiredService<MultiDevicesPanelWindow>();
-                multiDevicesPanelWindow.ShowDialog();
-            });
+            ShowConnectWindowCommand = new(ShowConnectWindow);
+            ShowDisconnectWindowCommand = new(ShowDisconnectWindow);
+            ShowMultiDevicesPanelWindowCommand = new(ShowMultiDevicesPanelWindow);
         }
 
         public ObservableCollection<Device> OnlineDevices => _devicesRepository.OnlineDevices;
         public ObservableCollection<Device> OfflineDevices => _devicesRepository.OfflineDevices;
+        public DelegateCommand ShowConnectWindowCommand { get; }
+        public DelegateCommand ShowDisconnectWindowCommand { get; }
+        public DelegateCommand ShowMultiDevicesPanelWindowCommand { get; }
 
-        public DelegateCommand<Window> ConnectCommand { get;}
-        public DelegateCommand<Window> MultiDevicesCommand { get; }
+
+        public void ShowConnectWindow() => Application.Current.AsDIApplication()!
+            .GetWindow<ConnectWindow>().ShowDialog();
+        public void ShowDisconnectWindow() => Application.Current.AsDIApplication()!
+            .GetWindow<DisconnectWindow>().ShowDialog();
+        public void ShowMultiDevicesPanelWindow() => Application.Current.AsDIApplication()!
+            .GetWindow<MultiDevicesPanelWindow>().ShowDialog();
     }
 }

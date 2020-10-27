@@ -23,14 +23,20 @@ namespace PV6900.Wpf.ViewModels
         private readonly ManagedProgramParseService _managedProgramParseService;
         private readonly ProgramExecutor _programExecutor;
         private readonly DeviceStorageService _deviceStorageService;
+        private readonly TimeSpanVoltaChartVM _timeSpanVoltaChartVM;
+        private readonly TimeSpanAmpereChartVM _timeSpanAmpereChartVM;
         public ProgramDashboardVM(
             ManagedProgramParseService managedProgramParseService,
             ProgramExecutor programExecutor,
-            DeviceStorageService deviceStorageService)
+            DeviceStorageService deviceStorageService,
+            TimeSpanVoltaChartVM timeSpanVoltaChartVM,
+            TimeSpanAmpereChartVM timeSpanAmpereChartVM)
         {
             _managedProgramParseService = managedProgramParseService;
             _programExecutor = programExecutor;
             _deviceStorageService = deviceStorageService;
+            _timeSpanVoltaChartVM = timeSpanVoltaChartVM;
+            _timeSpanAmpereChartVM = timeSpanAmpereChartVM;
 
             AddCommand = new(() =>ManagedProgramSteps.Add(new()));
             DeleteCommand = new((dataGrid => ManagedProgramSteps
@@ -56,13 +62,19 @@ namespace PV6900.Wpf.ViewModels
         private bool _inRunning =false;
         public int OuterLoopCount { get => _outerLoopCount; set => SetProperty(ref _outerLoopCount, value); }
         private int _outerLoopCount = 1;
+
+
         public void StartProgram(DataGrid dataGrid)
         {
-            InRunning = true;
+            if (InRunning) { return; }
+            _timeSpanVoltaChartVM.Reset();
+            _timeSpanAmpereChartVM.Reset();
+
             dataGrid.SetBinding(DataGrid.SelectedItemProperty,new Binding(nameof(CurrentManagedProgramStep)));
             Program program = _managedProgramParseService.ParseManagedProgram(new ManagedProgram
             { LoopCount = OuterLoopCount, ManagedProgramSteps = ManagedProgramSteps.ToList() });
-            _startProgramAwaitable = _programExecutor.ExecuteProgramAsync(
+
+            _programExecutor.ExecuteProgramAsync(
                 _deviceStorageService.Get()!, program).ContinueWith(task=>{
                     Application.Current.Dispatcher.Invoke(()=>
                         {
@@ -72,23 +84,11 @@ namespace PV6900.Wpf.ViewModels
                             InRunning=false;
                         });
                 }).ConfigureAwait(false);
+            InRunning = true;
         }
 
-        private ConfiguredTaskAwaitable? _startProgramAwaitable;
-
-        public void StopProgram(DataGrid dataGrid)
-        {
-            if(_startProgramAwaitable.HasValue){
-                _programExecutor.StopProgram();
-                _startProgramAwaitable.Value.GetAwaiter().OnCompleted( 
-                    ()=>{
-                        BindingOperations.ClearBinding(dataGrid,DataGrid.SelectedItemProperty);
-                        //GC.Collect();
-                        InRunning = false;
-                    }
-                );
-            }
-        }
+        private ConfiguredTaskAwaitable? _programExecutingAwaitable;
+        public void StopProgram(DataGrid dataGrid) => _programExecutor.StopProgram();
 
         public ManagedProgramStep? CurrentManagedProgramStep
         {
@@ -96,6 +96,8 @@ namespace PV6900.Wpf.ViewModels
             set=>SetProperty(ref _currentManagedProgramStep,value);
         }
         private ManagedProgramStep? _currentManagedProgramStep;
+
+        
 
     }
 }

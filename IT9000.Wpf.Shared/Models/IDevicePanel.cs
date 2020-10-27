@@ -9,7 +9,7 @@ namespace IT9000.Wpf.Shared.Models
 {
     public interface IDevicePanel
     {
-        Window LaunchDevicePanelWindow(Device device);
+        UIElement CreateDevicePanelUI(Device device);
         void Onclosed(Action callback);
         void StartRunProgram(Device device);
         bool CanRunProgram(Device device);

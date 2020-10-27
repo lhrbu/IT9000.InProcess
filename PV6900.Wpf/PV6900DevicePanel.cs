@@ -13,6 +13,7 @@ using PV6900.Wpf.Shared.Models;
 using PV6900.Wpf.Shared.Services;
 using PV6900.Wpf.ViewModels;
 using PV6900.Wpf.Repositories;
+using PV6900.Wpf.Views;
 
 namespace PV6900.Wpf
 {
@@ -21,38 +22,38 @@ namespace PV6900.Wpf
         private DevicePanelWindowsRepository _devicePanelWindowsRepository=null!;
         public IServiceProvider ServiceProvider=>_serviceProvider;
         public IConfiguration Configuration => _configuration;
-        public Window LaunchDevicePanelWindow(Device device)
+        public Device Device { get; private set; } = null!;
+
+        public UIElement CreateDevicePanelUI(Device device)
         {
             Initialize();
+            Device = device;
+
             _devicePanelWindowsRepository = ServiceProvider.GetRequiredService<DevicePanelWindowsRepository>();
+            
             using IServiceScope scope = ServiceProvider.CreateScope();
             scope.ServiceProvider.GetRequiredService<DeviceStorageService>().Set(device);
             PV6900Window window = scope.ServiceProvider.GetRequiredService<PV6900Window>();
 
-            while(!_devicePanelWindowsRepository.DevicePanelWindowMap.TryAdd(device, window));
-            window.Closed += (sender, e) =>
-            {
-                  _onClosedAction?.Invoke();
-                while(!_devicePanelWindowsRepository.DevicePanelWindowMap.TryRemove(device, out _));
-            };
+            _devicePanelWindowsRepository.DevicePanelWindowMap.TryAdd(device, window);
             return window;
         }
+       
         public void Onclosed(Action callback)=>_onClosedAction = callback;
         private Action? _onClosedAction;
 
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<PV6900Window>();
-            //services.AddScoped<TimeSpanChartsWindow>();
+            services.AddTransient<PV6900Window>();
+            services.AddTransient<TimeSpanChartsWindow>();
 
-            services.AddScoped<PV6900WindowVM>();
-            services.AddScoped<TimeSpanVoltaChartVM>();
-            services.AddScoped<TimeSpanAmpereChartVM>();
+            services.AddTransient<PV6900WindowVM>();
             services.AddScoped<TimeSpanVoltaChartVM>();
             services.AddScoped<TimeSpanAmpereChartVM>();
             services.AddScoped<TimeSpanGaugesVM>();
-            services.AddScoped<ProgramDashboardVM>();
+            services.AddTransient<ProgramDashboardVM>();
+            services.AddTransient<MonitorMenuVM>();
 
             services.AddTransient<ManagedProgramParseService>();
            
@@ -62,6 +63,8 @@ namespace PV6900.Wpf
 
             services.AddTransient<DeviceSettingDataQueryService>();
             services.AddTransient<DeviceDataMeasureService>();
+
+
             services.AddScoped<DeviceStorageService>();
             services.AddScoped<DeviceMonitorService>();
 
@@ -73,9 +76,12 @@ namespace PV6900.Wpf
             services.AddSingleton<IIteInteropService, PV6900IteInteropService>();
 #endif
         }
+
+
+        private static bool _initializedFlag = false;
         private static IServiceProvider _serviceProvider=null!;
         private static IConfiguration _configuration=null!;
-        private static bool _initializedFlag = false;
+       
         private void Initialize()
         {
             if (!_initializedFlag)
@@ -124,5 +130,7 @@ namespace PV6900.Wpf
                     .Command.Execute(devicePanelWindow.DataGrid_ProgramEditor);
             }
         }
+
+        
     }
 }

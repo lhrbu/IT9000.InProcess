@@ -15,21 +15,16 @@ namespace IT9000.Wpf.ViewModels
     public class MultiDevicesPanelWindowVM
     {
         private readonly DevicesRepository _devicesRepository;
-        public MultiDevicesPanelWindowVM(DevicesRepository devicesRepository)
+        private readonly DevicePanelsRepository _devicePanelsRepository;
+        public MultiDevicesPanelWindowVM(
+            DevicesRepository devicesRepository,
+            DevicePanelsRepository devicePanelsRepository)
         { 
             _devicesRepository = devicesRepository;
+            _devicePanelsRepository = devicePanelsRepository;
+
             SelectionsResetCommand = new(listBox => listBox.SelectedItem = null);
-            SelectionsRunCommand = new(listBox=> 
-            {
-                var selectedDevices = listBox.SelectedItems.Cast<Device>();
-                foreach(var devicePanelPair in _devicesRepository.DevicePanelMap)
-                {
-                    if(selectedDevices.Contains(devicePanelPair.Key))
-                    {
-                        devicePanelPair.Value.StartRunProgram(devicePanelPair.Key);
-                    }
-                }
-            });
+            SelectionsRunCommand = new(SelectionsRun);
         }
 
         public ObservableCollection<Device> OnlineDevices => _devicesRepository.OnlineDevices;
@@ -38,5 +33,29 @@ namespace IT9000.Wpf.ViewModels
 
         public DelegateCommand<ListBox> SelectionsResetCommand { get; }
         public DelegateCommand<ListBox> SelectionsRunCommand { get; }
+
+        public void SelectionsRun(ListBox listBox)
+        {
+            try
+            {
+                IEnumerable<Device> devices = listBox.Items.Cast<Device>();
+                IEnumerable<IDevicePanel?> devicePanels = devices.Select(_devicePanelsRepository.FindDevicePanel);
+                foreach (Device device in devices)
+                {
+                    IDevicePanel? devicePanel = _devicePanelsRepository.FindDevicePanel(device);
+                    if (devicePanel is null || (!devicePanel.CanRunProgram(device)))
+                    {
+                        MessageBox.Show($"{device.Name} can't run program now.", "Error:");
+                        return;
+                    }
+                }
+                foreach (Device device in devices)
+                {
+                    IDevicePanel devicePanel = _devicePanelsRepository.FindDevicePanel(device)!;
+                    devicePanel.StartRunProgram(device);
+                }
+            }catch(Exception e) { MessageBox.Show(e.ToString()); }
+            finally { Window.GetWindow(listBox).Close(); }
+        }
     }
 }

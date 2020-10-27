@@ -25,23 +25,24 @@ namespace IT9000.Wpf
     {
         public IServiceProvider ServiceProvider { get; set; } = null!;
         public IConfiguration Configuration { get; set; } = null!;
-
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<MainWindow>();
             services.AddTransient<ConnectWindow>();
-            services.AddSingleton<MultiDevicesPanelWindow>();
+            services.AddTransient<DisconnectWindow>();
+            services.AddTransient<MultiDevicesPanelWindow>();
 
             services.AddTransient<MainWindowVM>();
             services.AddTransient<ConnectWindowVM>();
-            services.AddSingleton<MultiDevicesPanelWindowVM>();
+            services.AddTransient<DisconnectWindowVM>();
+            services.AddTransient<MultiDevicesPanelWindowVM>();
 
             services.AddSingleton<DevicesRepository>();
+            services.AddSingleton<DevicePanelsRepository>();
             services.AddSingleton<PluginTypesRepository>();
 
             services.AddTransient<PluginLoadService>();
             services.AddTransient<DeviceDetectService>();
-            services.AddTransient<CommandSendService>();
             services.AddTransient<DevicePanelInstanceService>();
 
 #if DEBUG
@@ -56,15 +57,12 @@ namespace IT9000.Wpf
             try
             {
                 base.OnStartup(e);
-                this.OnStartupProxy<MainWindow>();
-                MultiDevicesPanelWindow multiDevicesPanelWindow = ServiceProvider
-                    .GetRequiredService<MultiDevicesPanelWindow>();
-                multiDevicesPanelWindow.Closing += (sender, e) =>
-                {
-                    multiDevicesPanelWindow.Visibility = Visibility.Hidden;
-                    e.Cancel = true;
-                };
-                Application.Current.MainWindow.Closed += (sender, e) => Application.Current.Shutdown();
+                this.OnStartupProxy();
+                MainWindow mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
+                MainWindow = mainWindow;
+                MainWindow.Show();
+                //MainWindow.Show();
+                //IT9000MainWindow.Closed += (sender, e) => Application.Current.Shutdown();
             }
             catch(Exception exception)
             {

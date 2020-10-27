@@ -28,18 +28,14 @@
             <Menu Style="{DynamicResource MaterialDesignMenu}" Grid.Row="0"
                 Foreground="{DynamicResource PrimaryHueDarkBrush}"
                 Background="{DynamicResource MaterialDesignTextFieldBoxHoverBackground}">
-                <MenuItem Style="{DynamicResource MaterialDesignMenuItem}" Header="Connect" 
-                          Command="{Binding ConnectCommand}"
-                          CommandParameter="{Binding ElementName=Window_MainWindow}"/>
-                <MenuItem Style="{DynamicResource MaterialDesignMenuItem}" Header="Config" 
-                          />
-                <MenuItem Style="{DynamicResource MaterialDesignMenuItem}" Header="Multi Devices" 
-                          Command="{Binding MultiDevicesCommand}"
-                          CommandParameter="{Binding ElementName=Window_MainWindow}"/>
+                
+                <MenuItem  Header="Connect" Command="{Binding ShowConnectWindowCommand}" />
+                <MenuItem Header="Disconnect" Command="{Binding ShowDisconnectWindowCommand}"/>
+                <MenuItem Header="Multi Devices" Command="{Binding ShowMultiDevicesPanelWindowCommand}" />
             </Menu>
         </StackPanel>
 
-        <TabControl  Grid.Row="1" Margin="5px,0">
+        <TabControl  Grid.Row="1" Margin="5px,0" x:Name="TabControl_DevicePanels">
             <TabItem Header="Offline Devices">
                 <ListView ItemsSource="{Binding OfflineDevices}">
                     <ListView.ItemTemplate>

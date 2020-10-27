@@ -23,17 +23,14 @@ namespace IT9000.Wpf.ViewModels
         private readonly DevicesRepository _devicesRepository;
         private readonly DevicePanelInstanceService _devicePanelInstanceService;
         private readonly PluginLoadService _pluginLoadService;
-        private readonly MultiDevicesPanelWindow _multiDevicesPanelWindow;
         public ConnectWindowVM(
             DevicesRepository devicesRepository,
             DevicePanelInstanceService devicePanelInstanceService,
-            PluginLoadService pluginLoadService,
-            MultiDevicesPanelWindow multiDevicesPanelWindow)
+            PluginLoadService pluginLoadService)
         {
             _devicesRepository = devicesRepository;
             _devicePanelInstanceService = devicePanelInstanceService;
             _pluginLoadService = pluginLoadService;
-            _multiDevicesPanelWindow = multiDevicesPanelWindow;
 
             SelectionsResetCommand = new(listBox => listBox.SelectedItem = null);
             SelectionsConnectCommand = new(SelectionsConnect);
@@ -54,38 +51,28 @@ namespace IT9000.Wpf.ViewModels
                 foreach (Device device in devices)
                 {
                     _pluginLoadService.Load(device);
-                    IDevicePanel devicePanel = _devicePanelInstanceService.CreateInstance(device);
-                    _devicesRepository.DeviceOnline(device,devicePanel);
+                    IDevicePanel devicePanel = _devicePanelInstanceService.CreateDevicePanelInstance(device);
 
-                    devicePanel.Onclosed(()=>{
-                        _devicesRepository.DeviceOffline(device);
-                        if(_devicesRepository.OnlineDevices.Count()==0)
-                        {
-                            _multiDevicesPanelWindow.Close();
-                            Application.Current.MainWindow.Focus();
-                        }
-                    });
+                    TabItem tabItem = new TabItem()
+                    {
+                        Header = device.Name,
+                        Content = devicePanel.CreateDevicePanelUI(device),
+                        VerticalContentAlignment = VerticalAlignment.Top
+                    };
 
-                    Window devicePanelWindow = devicePanel.LaunchDevicePanelWindow(device);
-                    
-                    devicePanelWindow.Owner= Application.Current.MainWindow;
+                    TabControl tabControl = (Application.Current.MainWindow as MainWindow)!.TabControl_DevicePanels;
+                    tabControl.Items.Add(tabItem);
+                    tabControl.SelectedItem = tabItem;
 
-                    WindowLocationDistributeService distributeService = new(4,2);
-                    WindowLocation windowLocation = distributeService.GetWindowLocation(int.Parse(device.Index));
-                    devicePanelWindow.Left = windowLocation.Left;
-                    devicePanelWindow.Top = windowLocation.Top;
-                    devicePanelWindow.Show();
-                    Window.GetWindow(listBox).Close();
-
-                    _multiDevicesPanelWindow.Owner = Application.Current.MainWindow;
-                    _multiDevicesPanelWindow.Topmost = true;
-                    _multiDevicesPanelWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-                    _multiDevicesPanelWindow.Show();
-
+                    _devicesRepository.DeviceOnline(device, devicePanel);
                 }
             }catch(Exception err)
             {
                 MessageBox.Show(err.ToString(),"Can't connect device error");
+            }
+            finally
+            {
+                Window.GetWindow(listBox).Close();
             }
         }
     }

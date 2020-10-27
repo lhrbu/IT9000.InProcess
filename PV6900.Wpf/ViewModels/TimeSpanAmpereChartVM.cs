@@ -6,16 +6,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PV6900.Wpf.Services;
+using PV6900.Wpf.Shared.Models;
 
 namespace PV6900.Wpf.ViewModels
 {
     public class TimeSpanAmpereChartVM
     {
         private readonly DeviceMonitorService _deviceMonitorService;
+        private readonly EventHandler<DataMeasureEventArgs> _onMeaured;
         public TimeSpanAmpereChartVM(DeviceMonitorService deviceMonitorService)
         {
             _deviceMonitorService = deviceMonitorService;
-            _deviceMonitorService.AfterDataMeasure+=(sender,e)=>FetchPoint(e.Ampere);
+            _onMeaured = (sender, e) => FetchPoint(e.Ampere);
+            _deviceMonitorService.AfterDataMeasure+=_onMeaured;
         }
         private DateTimeOffset _startTime = DateTimeOffset.Now;
         public ObservableCollection<TimeSpanAmperePoint> Points { get; } = new();
@@ -42,5 +45,16 @@ namespace PV6900.Wpf.ViewModels
                 Points.Add(point);
             }
         }
+
+        //private bool _disposed = false;
+        //public void Dispose()
+        //{
+        //    if(!_disposed)
+        //    {
+        //        _deviceMonitorService.AfterDataMeasure -= _onMeaured;
+        //        _disposed = true;
+        //    }
+        //    GC.SuppressFinalize(this);
+        //}
     }
 }

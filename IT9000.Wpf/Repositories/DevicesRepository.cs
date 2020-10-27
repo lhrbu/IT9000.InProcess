@@ -13,60 +13,46 @@ namespace IT9000.Wpf.Repositories
 {
     public class DevicesRepository
     {
+        private readonly DevicePanelsRepository _devicePanelsRepository;
+        public DevicesRepository(DevicePanelsRepository devicePanelsRepository)
+        { _devicePanelsRepository = devicePanelsRepository; }
+        private Dispatcher _Dispatcher => Application.Current.Dispatcher;
         public void DeviceOnline(Device device,IDevicePanel devicePanel)
         {
-            Dispatcher dispatcher = Application.Current.Dispatcher;
-            if (!OnlineDevices.Contains(device))
-            {
-                dispatcher.Invoke(()=>
-                    OnlineDevices.Add(device));
-            }
             if(OfflineDevices.Contains(device))
-            {
-                dispatcher.Invoke(()=>
-                    OfflineDevices.Remove(device));
-            }
-            SortOfflineDeivces();
-            SortOnlineDevices();
-            while(!DevicePanelMap.TryAdd(device, devicePanel));
+            { _Dispatcher.Invoke(()=>OfflineDevices.Remove(device));}
+
+            if (!OnlineDevices.Contains(device))
+            { _Dispatcher.Invoke(() => OnlineDevices.Add(device)); }
+
+            SortDevices(OfflineDevices);
+            SortDevices(OnlineDevices);
+
+            _devicePanelsRepository.TryRegisterDevicePanel(device, devicePanel);
         }
         public void DeviceOffline(Device device)
         {
-            Dispatcher dispatcher = Application.Current.Dispatcher;
-            if(!OfflineDevices.Contains(device))
-            {
-                dispatcher.Invoke(()=>OfflineDevices.Add(device));
-            }
+            
             if(OnlineDevices.Contains(device))
-            {
-                dispatcher.Invoke(()=>OnlineDevices.Remove(device));
-            }
-            SortOfflineDeivces();
-            SortOnlineDevices();
-            if (DevicePanelMap.ContainsKey(device))
-            {
-                while (!DevicePanelMap.TryRemove(device, out _)) ;
-            }
-        }
-        public void SortOfflineDeivces()
-        {
-            Application.Current.Dispatcher.Invoke(()=>{
-                List<Device> sortedList = OfflineDevices.OrderBy(item=>item.Index).ToList(); 
-                for(int i=0;i<sortedList.Count();++i)
-                { OfflineDevices.Move(OfflineDevices.IndexOf(sortedList[i]),i);}
-            });
-        }
-        public void SortOnlineDevices()
-        {
-            Application.Current.Dispatcher.Invoke(()=>{
-                List<Device> sortedList = OnlineDevices.OrderBy(item=>item.Index).ToList(); 
-                for(int i=0;i<sortedList.Count();++i)
-                { OnlineDevices.Move(OnlineDevices.IndexOf(sortedList[i]),i);}
-            });
+            { _Dispatcher.Invoke(()=>OnlineDevices.Remove(device));}
+            if (!OfflineDevices.Contains(device))
+            { _Dispatcher.Invoke(() => OfflineDevices.Add(device)); }
+
+            SortDevices(OfflineDevices);
+            SortDevices(OnlineDevices);
+            _devicePanelsRepository.TryDisposeDevicePanel(device);
         }
         
         public ObservableCollection<Device> OnlineDevices { get;} = new();
         public ObservableCollection<Device> OfflineDevices { get;} = new();
-        public ConcurrentDictionary<Device, IDevicePanel> DevicePanelMap { get; } = new();
+        private void SortDevices(ObservableCollection<Device> devices)
+        {
+            List<Device> sortedDevices = devices.OrderBy(item => item.Index).ToList();
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                for (int i = 0; i < sortedDevices.Count(); ++i)
+                { devices.Move(devices.IndexOf(sortedDevices[i]), i); }
+            });
+        }
     }
 }

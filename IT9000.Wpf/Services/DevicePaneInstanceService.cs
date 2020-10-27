@@ -19,7 +19,7 @@ namespace IT9000.Wpf.Services
         public DevicePanelInstanceService(PluginTypesRepository pluginTypesRepository)
         { _pluginTypesRepository = pluginTypesRepository;}
 
-        public IDevicePanel CreateInstance(Device device)
+        public IDevicePanel CreateDevicePanelInstance(Device device)
         {
             ConcurrentDictionary<string,Type> typeModelMap = _pluginTypesRepository.ModelTypeMap;
 

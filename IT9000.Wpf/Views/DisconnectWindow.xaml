@@ -1,13 +1,13 @@
-﻿<Window x:Class="IT9000.Wpf.Views.ConnectWindow"
+﻿<Window x:Class="IT9000.Wpf.Views.DisconnectWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespaceIT9000.Wpf.Views"
-        xmlns:controls="clr-namespace:IT9000.Wpf.Controls"
+        xmlns:local="clr-namespace:IT9000.Wpf.Views"
         mc:Ignorable="d"
         
-        Title="Offline Device List" Height="400" Width="300"
+        xmlns:controls="clr-namespace:IT9000.Wpf.Controls"
+        Title="Online Device List" Height="400" Width="300"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Regular"
@@ -18,17 +18,18 @@
         FontFamily="{DynamicResource MaterialDesignFont}">
     <StackPanel>
         <controls:DevicesList   x:Name="ListBox_Devices"
-               ItemsSource="{Binding OfflineDevices}" IconBrush="Red"></controls:DevicesList>
-        
+                                ItemsSource="{Binding OnlineDevices}" IconBrush="Green">
+        </controls:DevicesList>
+
         <StackPanel Orientation="Horizontal" Margin="12px,32px,0,0" 
-                    Visibility="{Binding OfflineDevicesEmptyFlag}">
+                    Visibility="{Binding OnlineDevicesEmptyFlag}">
             <Button Style="{DynamicResource MaterialDesignOutlinedButton}" Content="Reset" 
                     Margin="16px 0"
                     Command="{Binding SelectionsResetCommand}"
                     CommandParameter="{Binding ElementName=ListBox_Devices}"
                     />
-            <Button Style="{DynamicResource MaterialDesignRaisedDarkButton}" Content="Connect" 
-                    Command="{Binding SelectionsConnectCommand}"
+            <Button Style="{DynamicResource MaterialDesignRaisedDarkButton}" Content="Disconnect" 
+                    Command="{Binding SelectionsDisconnectCommand}"
                     CommandParameter="{Binding ElementName=ListBox_Devices}"/>
         </StackPanel>
     </StackPanel>
