@@ -25,6 +25,7 @@ namespace IT9000.Wpf.ViewModels
 
             SelectionsResetCommand = new(listBox => listBox.SelectedItem = null);
             SelectionsRunCommand = new(SelectionsRun);
+            SelectionsStopCommand = new(SelectionsStop);
         }
 
         public ObservableCollection<Device> OnlineDevices => _devicesRepository.OnlineDevices;
