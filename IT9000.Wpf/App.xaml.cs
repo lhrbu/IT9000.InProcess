@@ -60,6 +60,7 @@ namespace IT9000.Wpf
                 this.OnStartupProxy();
                 MainWindow mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
                 MainWindow = mainWindow;
+                mainWindow.Closed+=(sender,e)=>Application.Current.Shutdown();
                 MainWindow.Show();
                 //MainWindow.Show();
                 //IT9000MainWindow.Closed += (sender, e) => Application.Current.Shutdown();

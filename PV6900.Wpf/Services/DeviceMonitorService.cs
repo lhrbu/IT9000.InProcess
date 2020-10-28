@@ -56,7 +56,7 @@ namespace PV6900.Wpf.Services
             while (!_cancellationTokenSource.Token.IsCancellationRequested)
             {
                 _iteInteropService.WaitHandle.WaitOne();
-                double settingVolta = _settingDataQueryService.GetSettingAmpereUnsafe(device);
+                double settingVolta = _settingDataQueryService.GetSettingVoltaUnsafe(device);
                 double settingAmpere = _settingDataQueryService.GetSettingAmpereUnsafe(device);
                 double volta = _measureService.GetVoltaUnsafe(device);
                 double ampere = _measureService.GetAmpereUnsafe(device);

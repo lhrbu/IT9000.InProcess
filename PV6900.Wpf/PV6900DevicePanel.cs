@@ -13,7 +13,7 @@ using PV6900.Wpf.Shared.Models;
 using PV6900.Wpf.Shared.Services;
 using PV6900.Wpf.ViewModels;
 using PV6900.Wpf.Repositories;
-using PV6900.Wpf.Views;
+using PV6900.Wpf.Controls;
 
 namespace PV6900.Wpf
 {
@@ -24,6 +24,8 @@ namespace PV6900.Wpf
         public IConfiguration Configuration => _configuration;
         public Device Device { get; private set; } = null!;
 
+        private IServiceScope _serviceScope=null!;
+
         public UIElement CreateDevicePanelUI(Device device)
         {
             Initialize();
@@ -31,9 +33,9 @@ namespace PV6900.Wpf
 
             _devicePanelWindowsRepository = ServiceProvider.GetRequiredService<DevicePanelWindowsRepository>();
             
-            using IServiceScope scope = ServiceProvider.CreateScope();
-            scope.ServiceProvider.GetRequiredService<DeviceStorageService>().Set(device);
-            PV6900Window window = scope.ServiceProvider.GetRequiredService<PV6900Window>();
+            _serviceScope = ServiceProvider.CreateScope();
+            _serviceScope.ServiceProvider.GetRequiredService<DeviceStorageService>().Set(device);
+            PV6900Window window = _serviceScope.ServiceProvider.GetRequiredService<PV6900Window>();
 
             _devicePanelWindowsRepository.DevicePanelWindowMap.TryAdd(device, window);
             return window;
@@ -46,7 +48,7 @@ namespace PV6900.Wpf
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<PV6900Window>();
-            services.AddTransient<TimeSpanChartsWindow>();
+            services.AddTransient<TimeSpanCharts>();
 
             services.AddTransient<PV6900WindowVM>();
             services.AddScoped<TimeSpanVoltaChartVM>();

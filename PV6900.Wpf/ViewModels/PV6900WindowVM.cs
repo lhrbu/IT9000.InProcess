@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using Raccoon.DevKits.Wpf.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
-using PV6900.Wpf.Views;
 using System.Runtime.CompilerServices;
 
 namespace PV6900.Wpf.ViewModels
@@ -21,15 +20,21 @@ namespace PV6900.Wpf.ViewModels
         public TimeSpanGaugesVM TimeSpanGaugesVM { get; }
         public ProgramDashboardVM ProgramDashboardVM { get; }
         public MonitorMenuVM MonitorMenuVM { get; }
+        public TimeSpanVoltaChartVM TimeSpanVoltaChartVM{get;}
+        public TimeSpanAmpereChartVM TimeSpanAmpereChartVM {get;}
         public PV6900WindowVM(
             TimeSpanGaugesVM timeSpanGaugesVM,
             ProgramDashboardVM programDashboardVM,
-            MonitorMenuVM monitorMenuVM
+            MonitorMenuVM monitorMenuVM,
+            TimeSpanVoltaChartVM timeSpanVoltaChartVM,
+            TimeSpanAmpereChartVM timeSpanAmpereChartVM
             )
         { 
             TimeSpanGaugesVM = timeSpanGaugesVM;
             ProgramDashboardVM = programDashboardVM;
             MonitorMenuVM = monitorMenuVM;
+            TimeSpanVoltaChartVM =timeSpanVoltaChartVM;
+            TimeSpanAmpereChartVM = timeSpanAmpereChartVM;
         }
 
         
