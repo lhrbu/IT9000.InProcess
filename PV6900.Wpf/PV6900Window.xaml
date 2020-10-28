@@ -30,7 +30,7 @@
         </ResourceDictionary>
     </Grid.Resources>
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
     <Grid VerticalAlignment="Top">
         <Grid.Resources>
             <it9000sharedservices:BoolNegateConverter x:Key="boolNegateConverter" />

@@ -9,7 +9,7 @@ using IT9000.Wpf.Repositories;
 using System.Reflection;
 using System.IO;
 using System.Runtime.Loader;
-
+using System.Runtime.CompilerServices;
 
 namespace IT9000.Wpf.Services
 {
@@ -23,31 +23,29 @@ namespace IT9000.Wpf.Services
         private string GetPluginDllPath(string deviceModel) => Path.Combine(
             PluginsDirectory, $"{deviceModel}.Wpf.dll");
 
+        private string GetPluginDependencyDirectory(string deviceModel)=>Path
+            .Combine(PluginsDirectory,$"{deviceModel}.Refs");
+
         public void Load(Device device)
         {
             if(!_pluginsRepository.ModelTypeMap.ContainsKey(device.Model))
             {
-                LoadDependency(device);
+                ConfiguredTaskAwaitable awaitable = Task.Run(()=>LoadDependency(device)).ConfigureAwait(false);
                 foreach(Type type in Assembly.LoadFrom(GetPluginDllPath(device.Model)).GetTypes())
                 {
                     Type? idevicePanelType = type.GetInterface(nameof(IDevicePanel));
                     if(idevicePanelType is not null)
-                    { while(!_pluginsRepository.ModelTypeMap.TryAdd(device.Model,type)); }
+                    { _pluginsRepository.ModelTypeMap.TryAdd(device.Model,type); }
                 }
-                
+                awaitable.GetAwaiter().GetResult();
             }
         }
 
         private void LoadDependency(Device device)
         {
-            IEnumerable<string> dllPaths = Directory.GetFiles(PluginsDirectory).Where(item=>item.EndsWith(".dll"));
-            string devicePanelDllPath = GetPluginDllPath(device.Model);
+            IEnumerable<string> dllPaths = Directory.GetFiles(GetPluginDependencyDirectory(device.Model)).Where(item=>item.EndsWith(".dll"));
             foreach(string dllPath in dllPaths)
-            {
-                if(dllPath!=devicePanelDllPath){
-                    AssemblyLoadContext.Default.LoadFromAssemblyPath(dllPath);
-                }
-            }
+            {   AssemblyLoadContext.Default.LoadFromAssemblyPath(dllPath);}
         }
     }
 }

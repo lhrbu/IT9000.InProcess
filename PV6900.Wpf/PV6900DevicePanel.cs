@@ -33,6 +33,8 @@ namespace PV6900.Wpf
 
             _devicePanelWindowsRepository = ServiceProvider.GetRequiredService<DevicePanelWindowsRepository>();
             
+            TimeSpanCharts proxyInstance = ServiceProvider.GetRequiredService<TimeSpanCharts>();
+
             _serviceScope = ServiceProvider.CreateScope();
             _serviceScope.ServiceProvider.GetRequiredService<DeviceStorageService>().Set(device);
             PV6900Window window = _serviceScope.ServiceProvider.GetRequiredService<PV6900Window>();
