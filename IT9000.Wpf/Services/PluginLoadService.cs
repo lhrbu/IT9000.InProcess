@@ -30,22 +30,26 @@ namespace IT9000.Wpf.Services
         {
             if(!_pluginsRepository.ModelTypeMap.ContainsKey(device.Model))
             {
-                ConfiguredTaskAwaitable awaitable = Task.Run(()=>LoadDependency(device)).ConfigureAwait(false);
+                //LoadDependency(device);
+                //ConfiguredTaskAwaitable awaitable = Task.Run(()=>LoadDependency(device)).ConfigureAwait(false);
                 foreach(Type type in Assembly.LoadFrom(GetPluginDllPath(device.Model)).GetTypes())
                 {
                     Type? idevicePanelType = type.GetInterface(nameof(IDevicePanel));
                     if(idevicePanelType is not null)
                     { _pluginsRepository.ModelTypeMap.TryAdd(device.Model,type); }
                 }
-                awaitable.GetAwaiter().GetResult();
+                //awaitable.GetAwaiter().GetResult();
             }
         }
 
-        private void LoadDependency(Device device)
+        public void LoadDependency(Device device)
         {
-            IEnumerable<string> dllPaths = Directory.GetFiles(GetPluginDependencyDirectory(device.Model)).Where(item=>item.EndsWith(".dll"));
-            foreach(string dllPath in dllPaths)
-            {   AssemblyLoadContext.Default.LoadFromAssemblyPath(dllPath);}
+            if (!_pluginsRepository.ModelTypeMap.ContainsKey(device.Model))
+            {
+                IEnumerable<string> dllPaths = Directory.GetFiles(GetPluginDependencyDirectory(device.Model)).Where(item => item.EndsWith(".dll"));
+                foreach (string dllPath in dllPaths)
+                { AssemblyLoadContext.Default.LoadFromAssemblyPath(dllPath); }
+            }
         }
     }
 }

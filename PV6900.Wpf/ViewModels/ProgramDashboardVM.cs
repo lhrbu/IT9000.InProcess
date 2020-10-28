@@ -87,7 +87,6 @@ namespace PV6900.Wpf.ViewModels
             InRunning = true;
         }
 
-        private ConfiguredTaskAwaitable? _programExecutingAwaitable;
         public void StopProgram(DataGrid dataGrid) => _programExecutor.StopProgram();
 
         public ManagedProgramStep? CurrentManagedProgramStep

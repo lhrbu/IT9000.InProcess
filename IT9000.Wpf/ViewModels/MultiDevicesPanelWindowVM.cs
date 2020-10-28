@@ -33,13 +33,14 @@ namespace IT9000.Wpf.ViewModels
 
         public DelegateCommand<ListBox> SelectionsResetCommand { get; }
         public DelegateCommand<ListBox> SelectionsRunCommand { get; }
+        public DelegateCommand<ListBox> SelectionsStopCommand { get; }
 
         public void SelectionsRun(ListBox listBox)
         {
             try
             {
                 IEnumerable<Device> devices = listBox.Items.Cast<Device>();
-                IEnumerable<IDevicePanel?> devicePanels = devices.Select(_devicePanelsRepository.FindDevicePanel);
+                //IEnumerable<IDevicePanel?> devicePanels = devices.Select(_devicePanelsRepository.FindDevicePanel);
                 foreach (Device device in devices)
                 {
                     IDevicePanel? devicePanel = _devicePanelsRepository.FindDevicePanel(device);
@@ -56,6 +57,26 @@ namespace IT9000.Wpf.ViewModels
                 }
             }catch(Exception e) { MessageBox.Show(e.ToString()); }
             finally { Window.GetWindow(listBox).Close(); }
+        }
+
+        public void SelectionsStop(ListBox listBox)
+        {
+            IEnumerable<Device> devices = listBox.Items.Cast<Device>();
+            //IEnumerable<IDevicePanel?> devicePanels = devices.Select(_devicePanelsRepository.FindDevicePanel);
+            foreach (Device device in devices)
+            {
+                IDevicePanel? devicePanel = _devicePanelsRepository.FindDevicePanel(device);
+                if (devicePanel is null || (!devicePanel.CanStopProgram(device)))
+                {
+                    MessageBox.Show($"{device.Name} can't stop program now.", "Error:");
+                    return;
+                }
+            }
+            foreach (Device device in devices)
+            {
+                IDevicePanel devicePanel = _devicePanelsRepository.FindDevicePanel(device)!;
+                devicePanel.StopRunProgram(device);
+            }
         }
     }
 }

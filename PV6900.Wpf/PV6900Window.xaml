@@ -35,7 +35,8 @@
         <Grid.Resources>
             <it9000sharedservices:BoolNegateConverter x:Key="boolNegateConverter" />
             <pv6900sharedservices:InnerLoopFlagBoolConverter x:Key="innerLoopFlagBoolConverter" />
-            <ObjectDataProvider MethodName="GetNames" ObjectType="{x:Type sys:Enum}" 
+                <pv6900sharedservices:InnerLoopCountTextConverter x:Key="innerLoopCountTextConverter" />
+                <ObjectDataProvider MethodName="GetNames" ObjectType="{x:Type sys:Enum}" 
                             x:Key="InnerLoopFlagEnums">
                 <ObjectDataProvider.MethodParameters>
                     <x:Type TypeName="pv6900sharedmodels:InnerLoopFlag" />
@@ -94,18 +95,31 @@
                             <DataGridTextColumn Header="Duration" Binding="{Binding Duration}" Width="*" />
                             <DataGridComboBoxColumn Header="Inner loop type"  ItemsSource="{Binding Source={StaticResource InnerLoopFlagEnums}}" 
                                                 TextBinding="{Binding InnerLoopFlag}"/>
-                            <DataGridTextColumn Header="In.Loop Count" Binding="{Binding InnerLoopCount}"
-                                            IsReadOnly="{Binding InnerLoopFlag,Converter={StaticResource innerLoopFlagBoolConverter}}">
-
+                            <DataGridTextColumn Header="In.Loop Count" Binding="{Binding InnerLoopCount,Converter={StaticResource innerLoopCountTextConverter}}"
+                                                >
+                               
                             </DataGridTextColumn>
+
                             <!--<DataGridTemplateColumn Header="Inner Loop Count">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding InnerLoopCount}" 
-                                               IsEnabled="{Binding InnerLoopFlag,Converter={StaticResource innerLoopFlagBoolConverter}}" />
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>-->
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <DataTemplate.Triggers>
+                                            <DataTrigger Binding="{Binding InnerLoopFlag,Converter={StaticResource innerLoopFlagBoolConverter}}"
+                                                         Value="True">
+                                                <Setter Property="IsEnabled" Value="True" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding InnerLoopFlag,Converter={StaticResource innerLoopFlagBoolConverter}}"
+                                                         Value="False">
+                                                <Setter Property="IsEnabled" Value="False" />
+                                            </DataTrigger>
+                                        </DataTemplate.Triggers>
+                                        <TextBox Text="{Binding InnerLoopCount}" 
+                                               
+                                               BorderThickness="0" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>-->
+                            
                         </DataGrid.Columns>
                     </DataGrid>
                     <StackPanel Orientation="Horizontal" Margin="0,32,0,0">
@@ -140,7 +154,7 @@
 
         <controls:TimeSpanCharts Grid.Row="2" HorizontalAlignment="Center"
             TimeSpanVoltaChartDataContext="{Binding TimeSpanVoltaChartVM}"
-           TimeSpanAmpereChartDataContext="{Binding TimeSpanAmpereChartVM}">
+            TimeSpanAmpereChartDataContext="{Binding TimeSpanAmpereChartVM}">
         </controls:TimeSpanCharts>
 
         

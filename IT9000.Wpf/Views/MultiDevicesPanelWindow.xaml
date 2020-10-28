@@ -23,12 +23,19 @@
         <StackPanel Orientation="Horizontal" Margin="12px,32px,0,0" 
                     Visibility="{Binding OnlineDevicesEmptyFlag}">
             <Button Style="{DynamicResource MaterialDesignOutlinedButton}" Content="Reset" 
-                    Margin="16px 0"
                     Command="{Binding SelectionsResetCommand}"
                     CommandParameter="{Binding ElementName=ListBox_Devices}"
                     />
             <Button Style="{DynamicResource MaterialDesignRaisedDarkButton}" Content="Run" 
+                    Background="Green"
                     Command="{Binding SelectionsRunCommand}"
+                    CommandParameter="{Binding ElementName=ListBox_Devices}"
+                    Margin="16px 0"
+                    />
+
+            <Button Style="{DynamicResource MaterialDesignRaisedDarkButton}" Content="Stop"
+                    Background="Red"
+                    Command="{Binding SelectionsStopCommand}"
                     CommandParameter="{Binding ElementName=ListBox_Devices}"/>
         </StackPanel>
     </StackPanel>

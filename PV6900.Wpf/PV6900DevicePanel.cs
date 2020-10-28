@@ -22,22 +22,17 @@ namespace PV6900.Wpf
         private DevicePanelWindowsRepository _devicePanelWindowsRepository=null!;
         public IServiceProvider ServiceProvider=>_serviceProvider;
         public IConfiguration Configuration => _configuration;
-        public Device Device { get; private set; } = null!;
 
-        private IServiceScope _serviceScope=null!;
+        //private IServiceScope _serviceScope=null!;
 
         public UIElement CreateDevicePanelUI(Device device)
         {
             Initialize();
-            Device = device;
-
             _devicePanelWindowsRepository = ServiceProvider.GetRequiredService<DevicePanelWindowsRepository>();
-            
-            TimeSpanCharts proxyInstance = ServiceProvider.GetRequiredService<TimeSpanCharts>();
 
-            _serviceScope = ServiceProvider.CreateScope();
-            _serviceScope.ServiceProvider.GetRequiredService<DeviceStorageService>().Set(device);
-            PV6900Window window = _serviceScope.ServiceProvider.GetRequiredService<PV6900Window>();
+            using IServiceScope scope= ServiceProvider.CreateScope();
+            scope.ServiceProvider.GetRequiredService<DeviceStorageService>().Set(device);
+            PV6900Window window = scope.ServiceProvider.GetRequiredService<PV6900Window>();
 
             _devicePanelWindowsRepository.DevicePanelWindowMap.TryAdd(device, window);
             return window;
@@ -135,6 +130,15 @@ namespace PV6900.Wpf
             }
         }
 
-        
+        public bool CanStopProgram(Device device)
+        {
+            PV6900Window? devicePanelWindow = _devicePanelWindowsRepository
+               .DevicePanelWindowMap.GetValueOrDefault(device);
+            if(devicePanelWindow is not null)
+            {
+                return devicePanelWindow.Button_StopRunProgram.IsEnabled;
+            }
+            else { return false; }
+        }
     }
 }

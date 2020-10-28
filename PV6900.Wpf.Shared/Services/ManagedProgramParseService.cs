@@ -62,8 +62,8 @@ namespace PV6900.Wpf.Shared.Services
         {
             int stepsCount = managedProgramSteps.Count();
             if(stepsCount<2 ||
-                managedProgramSteps.First().InnerLoopFlag != InnerLoopFlag.On ||
-                managedProgramSteps.Last().InnerLoopFlag != InnerLoopFlag.Off ||
+                managedProgramSteps.First().InnerLoopFlag is not InnerLoopFlag.On ||
+                managedProgramSteps.Last().InnerLoopFlag is not InnerLoopFlag.Off ||
                 managedProgramSteps.Skip(1).Take(stepsCount-2).Any(step=>step.InnerLoopFlag is not InnerLoopFlag.None))
             {
                 return false;

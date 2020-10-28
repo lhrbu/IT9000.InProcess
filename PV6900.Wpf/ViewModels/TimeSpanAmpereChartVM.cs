@@ -13,12 +13,12 @@ namespace PV6900.Wpf.ViewModels
     public class TimeSpanAmpereChartVM
     {
         private readonly DeviceMonitorService _deviceMonitorService;
-        private readonly EventHandler<DataMeasureEventArgs> _onMeaured;
+        //private readonly EventHandler<DataMeasureEventArgs> _onMeaured;
         public TimeSpanAmpereChartVM(DeviceMonitorService deviceMonitorService)
         {
             _deviceMonitorService = deviceMonitorService;
-            _onMeaured = (sender, e) => FetchPoint(e.Ampere);
-            _deviceMonitorService.AfterDataMeasure+=_onMeaured;
+            //_onMeaured = (sender, e) => FetchPoint(e.Ampere);
+            _deviceMonitorService.AfterDataMeasure+= (sender, e) => FetchPoint(e.Ampere);
         }
         private DateTimeOffset _startTime = DateTimeOffset.Now;
         public ObservableCollection<TimeSpanAmperePoint> Points { get; } = new();
@@ -35,7 +35,7 @@ namespace PV6900.Wpf.ViewModels
                 TimeSpan = (long)(DateTimeOffset.Now - _startTime).TotalSeconds,
                 Ampere = ampere
             };
-            if (Points.Count() <= 50)
+            if (Points.Count() <= 60)
             {
                 Points.Add(point);
             }

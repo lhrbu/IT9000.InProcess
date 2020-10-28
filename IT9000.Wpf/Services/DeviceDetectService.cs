@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using IT9000.Wpf.Repositories;
 using IT9000.Wpf.Shared.Models;
 using IT9000.Wpf.Shared.Services;
 
@@ -11,8 +13,15 @@ namespace IT9000.Wpf.Services
     public class DeviceDetectService
     {
         private IIteInteropService _iteInteropService;
-        public DeviceDetectService(IIteInteropService iteInteropService)
-        { _iteInteropService = iteInteropService; }
+        private PluginLoadService _pluginLoadService;
+        public DeviceDetectService(
+            IIteInteropService iteInteropService,
+            PluginLoadService pluginLoadService,
+             PluginTypesRepository pluginTypesRepository)
+        { 
+            _iteInteropService = iteInteropService;
+            _pluginLoadService = pluginLoadService;
+        }
         public IEnumerable<Device> GetDevices()
         {
             int devicesCount = 0;
@@ -35,7 +44,19 @@ namespace IT9000.Wpf.Services
                 .Select(index => Encoding.Default.GetString(usbAddressesBuffer, index * 100, 100)
                 .Trim(char.MinValue)).ToList();
 
-            return GenerateDevices(deviceNames, deviceAddresses, usbAddresses);
+            IEnumerable<Device> devices = GenerateDevices(deviceNames, deviceAddresses, usbAddresses);
+
+            List<ConfiguredTaskAwaitable> taskAwaitables = new(devicesCount);
+            foreach (Device device in devices.GroupBy(item => item.Model).Select(pair => pair.AsEnumerable().First()))
+            {
+                ConfiguredTaskAwaitable taskAwaitable = Task.Run(() => _pluginLoadService.LoadDependency(device)).ConfigureAwait(false);
+                taskAwaitables.Add(taskAwaitable);
+            }
+            foreach (ConfiguredTaskAwaitable awaitable in taskAwaitables)
+            { awaitable.GetAwaiter().GetResult(); }
+            return devices;
+
+
         }
         private IEnumerable<Device> GenerateDevices(List<string> deviceNames,
             List<int> deviceAddresses, List<string> usbAddresses)

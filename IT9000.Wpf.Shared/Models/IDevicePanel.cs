@@ -14,5 +14,6 @@ namespace IT9000.Wpf.Shared.Models
         void StartRunProgram(Device device);
         bool CanRunProgram(Device device);
         void StopRunProgram(Device device);
+        bool CanStopProgram(Device device);
     }
 }
