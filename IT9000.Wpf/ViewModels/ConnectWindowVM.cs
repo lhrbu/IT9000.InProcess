@@ -48,6 +48,8 @@ namespace IT9000.Wpf.ViewModels
             try
             {
                 IEnumerable<Device> devices = listBox.SelectedItems.Cast<Device>()!.ToList()!;
+                TabItem? lastTabItem=null;
+                TabControl tabControl = (Application.Current.MainWindow as MainWindow)!.TabControl_DevicePanels;
                 foreach (Device device in devices)
                 {
                     _pluginLoadService.Load(device);
@@ -60,11 +62,14 @@ namespace IT9000.Wpf.ViewModels
                         VerticalContentAlignment = VerticalAlignment.Top
                     };
 
-                    TabControl tabControl = (Application.Current.MainWindow as MainWindow)!.TabControl_DevicePanels;
+                    
                     tabControl.Items.Add(tabItem);
-                    tabControl.SelectedItem = tabItem;
-
+                    //tabControl.SelectedItem = tabItem;
+                    lastTabItem = tabItem;
                     _devicesRepository.DeviceOnline(device, devicePanel);
+                }
+                if(lastTabItem!=null){
+                    tabControl.SelectedItem=lastTabItem;
                 }
             }catch(Exception err)
             {
