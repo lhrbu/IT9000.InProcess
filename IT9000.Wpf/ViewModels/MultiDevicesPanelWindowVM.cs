@@ -40,6 +40,7 @@ namespace IT9000.Wpf.ViewModels
         {
             try
             {
+                Window.GetWindow(listBox).Focus();
                 IEnumerable<Device> devices = listBox.Items.Cast<Device>();
                 //IEnumerable<IDevicePanel?> devicePanels = devices.Select(_devicePanelsRepository.FindDevicePanel);
                 foreach (Device device in devices)

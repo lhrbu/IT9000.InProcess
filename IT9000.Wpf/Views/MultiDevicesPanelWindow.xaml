@@ -25,6 +25,7 @@
             <Button Style="{DynamicResource MaterialDesignOutlinedButton}" Content="Reset" 
                     Command="{Binding SelectionsResetCommand}"
                     CommandParameter="{Binding ElementName=ListBox_Devices}"
+                    Margin="16px 0 0 0"
                     />
             <Button Style="{DynamicResource MaterialDesignRaisedDarkButton}" Content="Run" 
                     Background="Green"

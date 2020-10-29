@@ -90,12 +90,12 @@
                             Style="{DynamicResource MaterialDesignDataGrid}"
                             Name="DataGrid_ProgramEditor">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Volta" Binding="{Binding Volta}" Width="*"/>
-                            <DataGridTextColumn Header="Ampere" Binding="{Binding Ampere}" Width="*" />
-                            <DataGridTextColumn Header="Duration" Binding="{Binding Duration}" Width="*" />
+                            <DataGridTextColumn Header="Volta" Binding="{Binding Volta,UpdateSourceTrigger=PropertyChanged}" Width="*"/>
+                            <DataGridTextColumn Header="Ampere" Binding="{Binding Ampere,UpdateSourceTrigger=PropertyChanged}" Width="*" />
+                            <DataGridTextColumn Header="Duration" Binding="{Binding Duration,UpdateSourceTrigger=PropertyChanged}" Width="*" />
                             <DataGridComboBoxColumn Header="Inner loop type"  ItemsSource="{Binding Source={StaticResource InnerLoopFlagEnums}}" 
-                                                TextBinding="{Binding InnerLoopFlag}"/>
-                            <DataGridTextColumn Header="In.Loop Count" Binding="{Binding InnerLoopCount,Converter={StaticResource innerLoopCountTextConverter}}"
+                                                TextBinding="{Binding InnerLoopFlag,UpdateSourceTrigger=PropertyChanged}"/>
+                            <DataGridTextColumn Header="In.Loop Count" Binding="{Binding InnerLoopCount,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource innerLoopCountTextConverter}}"
                                                 >
                                
                             </DataGridTextColumn>
@@ -130,7 +130,7 @@
 
                         <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
                             <Label Content="Outer loop count:" />
-                            <TextBox Text="{Binding OuterLoopCount}" />
+                            <TextBox Text="{Binding OuterLoopCount,UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
 
                         <Button Margin="24,0,0,0"
