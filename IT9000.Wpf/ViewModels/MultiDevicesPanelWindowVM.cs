@@ -40,8 +40,7 @@ namespace IT9000.Wpf.ViewModels
         {
             try
             {
-                Window.GetWindow(listBox).Focus();
-                IEnumerable<Device> devices = listBox.Items.Cast<Device>();
+                IEnumerable<Device> devices = listBox.SelectedItems.Cast<Device>();
                 //IEnumerable<IDevicePanel?> devicePanels = devices.Select(_devicePanelsRepository.FindDevicePanel);
                 foreach (Device device in devices)
                 {
@@ -63,7 +62,7 @@ namespace IT9000.Wpf.ViewModels
 
         public void SelectionsStop(ListBox listBox)
         {
-            IEnumerable<Device> devices = listBox.Items.Cast<Device>();
+            IEnumerable<Device> devices = listBox.SelectedItems.Cast<Device>();
             //IEnumerable<IDevicePanel?> devicePanels = devices.Select(_devicePanelsRepository.FindDevicePanel);
             foreach (Device device in devices)
             {
@@ -79,6 +78,7 @@ namespace IT9000.Wpf.ViewModels
                 IDevicePanel devicePanel = _devicePanelsRepository.FindDevicePanel(device)!;
                 devicePanel.StopRunProgram(device);
             }
+            Window.GetWindow(listBox).Close();
         }
     }
 }

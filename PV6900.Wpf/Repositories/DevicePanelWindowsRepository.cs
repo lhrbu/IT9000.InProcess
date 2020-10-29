@@ -10,7 +10,7 @@ namespace PV6900.Wpf.Repositories
 {
     public class DevicePanelWindowsRepository
     {
-        public ConcurrentDictionary<Device, PV6900Window> DevicePanelWindowMap { get; }
+        public ConcurrentDictionary<string, PV6900Window> DevicePanelWindowMap { get; }
             = new();
     }
 }

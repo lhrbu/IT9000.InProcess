@@ -15,6 +15,7 @@ using System.Windows.Data;
 using System.Threading;
 using PV6900.Wpf.Models;
 using System.Runtime.CompilerServices;
+using System.Windows.Threading;
 
 namespace PV6900.Wpf.ViewModels
 {
@@ -56,27 +57,29 @@ namespace PV6900.Wpf.ViewModels
         public DelegateCommand AddCommand { get; }
         public DelegateCommand<DataGrid> DeleteCommand { get; }
         public DelegateCommand<DataGrid> StartCommand { get; }
-        public DelegateCommand<DataGrid> StopCommand { get; }
+        public DelegateCommand StopCommand { get; }
 
         public bool InRunning { get => _inRunning; set => SetProperty(ref _inRunning, value); }
         private bool _inRunning =false;
         public int OuterLoopCount { get => _outerLoopCount; set => SetProperty(ref _outerLoopCount, value); }
         private int _outerLoopCount = 1;
 
-
+        private Dispatcher _Dispatcher => Application.Current.Dispatcher;
         public void StartProgram(DataGrid dataGrid)
         {
             if (InRunning) { return; }
+
             _timeSpanVoltaChartVM.Reset();
             _timeSpanAmpereChartVM.Reset();
 
-            dataGrid.SetBinding(DataGrid.SelectedItemProperty,new Binding(nameof(CurrentManagedProgramStep)));
+            _Dispatcher.Invoke(() =>
+            { dataGrid.SetBinding(DataGrid.SelectedItemProperty, new Binding(nameof(CurrentManagedProgramStep)));});
             Program program = _managedProgramParseService.ParseManagedProgram(new ManagedProgram
             { LoopCount = OuterLoopCount, ManagedProgramSteps = ManagedProgramSteps.ToList() });
 
             _programExecutor.ExecuteProgramAsync(
-                _deviceStorageService.Get()!, program).ContinueWith(task=>{
-                    Application.Current.Dispatcher.Invoke(()=>
+                _deviceStorageService.Get()!, program!).ContinueWith(task=>{
+                    _Dispatcher.Invoke(()=>
                         {
                             BindingOperations.ClearBinding(dataGrid,DataGrid.SelectedItemProperty);
                             dataGrid.SelectedItem=null;
@@ -87,7 +90,7 @@ namespace PV6900.Wpf.ViewModels
             InRunning = true;
         }
 
-        public void StopProgram(DataGrid dataGrid) => _programExecutor.StopProgram();
+        public void StopProgram() => _programExecutor.StopProgram();
 
         public ManagedProgramStep? CurrentManagedProgramStep
         {

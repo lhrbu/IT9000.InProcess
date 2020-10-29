@@ -10,16 +10,23 @@ namespace IT9000.Wpf.Repositories
 {
     public class DevicePanelsRepository
     {
-        private readonly ConcurrentDictionary<Device, IDevicePanel> _deviceDevicePanelMap = new();
+        private readonly ConcurrentDictionary<string, IDevicePanel> _deviceDevicePanelMap = new();
 
         public bool TryRegisterDevicePanel(Device device, IDevicePanel devicePanel) =>
-            _deviceDevicePanelMap.TryAdd(device, devicePanel);
-        public bool TryDisposeDevicePanel(Device device) =>
-            _deviceDevicePanelMap.TryRemove(device, out _);
+            _deviceDevicePanelMap.TryAdd(device.Name, devicePanel);
+        public bool TryDisposeDevicePanel(Device device)
+        {
+            if(_deviceDevicePanelMap.TryRemove(device.Name, out IDevicePanel? devicePanel))
+            {
+                devicePanel?.Disconnect();
+                return true;
+            }
+            else { return false; }
+        }
 
         public IDevicePanel? FindDevicePanel(Device device)
         {
-            if(_deviceDevicePanelMap.TryGetValue(device, out IDevicePanel? devicePanel))
+            if(_deviceDevicePanelMap.TryGetValue(device.Name, out IDevicePanel? devicePanel))
             {
                 return devicePanel ?? null;
             }

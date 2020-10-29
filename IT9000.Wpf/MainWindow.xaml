@@ -24,18 +24,31 @@
             <RowDefinition Height="1*" />
             <RowDefinition Height="10*" />
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" VerticalAlignment="Center">
-            <Menu Style="{DynamicResource MaterialDesignMenu}" Grid.Row="0"
+        <StackPanel Grid.Row="0" VerticalAlignment="Center" Orientation="Horizontal"
+                    Margin="0">
+            <Button Style="{DynamicResource MaterialDesignOutlinedButton}"
+                    Margin="8 0 0 0"
+                    Content="Connect"
+                    Command="{Binding ShowConnectWindowCommand}"/>
+            <Button Style="{DynamicResource MaterialDesignOutlinedButton}"
+                    Margin="16 0"
+                    Content="Disconnect"
+                    Command="{Binding ShowDisconnectWindowCommand}"/>
+            <Button Style="{DynamicResource MaterialDesignOutlinedButton}"
+                    Content="Multi Devices"
+                    Command="{Binding ShowMultiDevicesPanelWindowCommand}"/>
+
+            <!--<Menu Style="{DynamicResource MaterialDesignMenu}"
                 Foreground="{DynamicResource PrimaryHueDarkBrush}"
-                Background="{DynamicResource MaterialDesignTextFieldBoxHoverBackground}">
+                >
                 
                 <MenuItem  Header="Connect" Command="{Binding ShowConnectWindowCommand}" />
                 <MenuItem Header="Disconnect" Command="{Binding ShowDisconnectWindowCommand}"/>
                 <MenuItem Header="Multi Devices" Command="{Binding ShowMultiDevicesPanelWindowCommand}" />
-            </Menu>
+            </Menu>-->
         </StackPanel>
 
-        <TabControl  Grid.Row="1" Margin="5px,0" x:Name="TabControl_DevicePanels">
+        <TabControl  Grid.Row="1" Margin="8,8,8,0" x:Name="TabControl_DevicePanels">
             <TabItem Header="Offline Devices">
                 <ListView ItemsSource="{Binding OfflineDevices}">
                     <ListView.ItemTemplate>

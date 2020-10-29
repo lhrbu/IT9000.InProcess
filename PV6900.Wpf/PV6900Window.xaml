@@ -36,7 +36,7 @@
             <it9000sharedservices:BoolNegateConverter x:Key="boolNegateConverter" />
             <pv6900sharedservices:InnerLoopFlagBoolConverter x:Key="innerLoopFlagBoolConverter" />
                 <pv6900sharedservices:InnerLoopCountTextConverter x:Key="innerLoopCountTextConverter" />
-                <ObjectDataProvider MethodName="GetNames" ObjectType="{x:Type sys:Enum}" 
+            <ObjectDataProvider MethodName="GetNames" ObjectType="{x:Type sys:Enum}" 
                             x:Key="InnerLoopFlagEnums">
                 <ObjectDataProvider.MethodParameters>
                     <x:Type TypeName="pv6900sharedmodels:InnerLoopFlag" />
@@ -87,15 +87,14 @@
                             CanUserDeleteRows="False"
                             AutoGenerateColumns="False"
                             CanUserSortColumns="False"
-                            Style="{DynamicResource MaterialDesignDataGrid}"
                             Name="DataGrid_ProgramEditor">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Volta" Binding="{Binding Volta,UpdateSourceTrigger=PropertyChanged}" Width="*"/>
-                            <DataGridTextColumn Header="Ampere" Binding="{Binding Ampere,UpdateSourceTrigger=PropertyChanged}" Width="*" />
-                            <DataGridTextColumn Header="Duration" Binding="{Binding Duration,UpdateSourceTrigger=PropertyChanged}" Width="*" />
+                            <DataGridTextColumn Header="Volta" Binding="{Binding Volta}" Width="*"/>
+                            <DataGridTextColumn Header="Ampere" Binding="{Binding Ampere}" Width="*" />
+                            <DataGridTextColumn Header="Duration" Binding="{Binding Duration}" Width="*"/>
                             <DataGridComboBoxColumn Header="Inner loop type"  ItemsSource="{Binding Source={StaticResource InnerLoopFlagEnums}}" 
                                                 TextBinding="{Binding InnerLoopFlag,UpdateSourceTrigger=PropertyChanged}"/>
-                            <DataGridTextColumn Header="In.Loop Count" Binding="{Binding InnerLoopCount,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource innerLoopCountTextConverter}}"
+                            <DataGridTextColumn Header="In.Loop Count" Binding="{Binding InnerLoopCount,Converter={StaticResource innerLoopCountTextConverter}}"
                                                 >
                                
                             </DataGridTextColumn>
@@ -145,7 +144,6 @@
                             Margin="8,0"
                             Background="Red" 
                             Command="{Binding StopCommand}"
-                            CommandParameter="{Binding ElementName=DataGrid_ProgramEditor}"
                             IsEnabled="{Binding InRunning}"
                             />
                     </StackPanel>
