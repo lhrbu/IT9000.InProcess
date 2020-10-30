@@ -39,7 +39,7 @@ namespace IT9000.Wpf
 
             services.AddSingleton<DevicesRepository>();
             services.AddSingleton<DevicePanelsRepository>();
-            services.AddSingleton<PluginTypesRepository>();
+            services.AddSingleton<PluginFactoriessRepository>();
 
             services.AddTransient<PluginLoadService>();
             services.AddTransient<DeviceDetectService>();

@@ -12,7 +12,7 @@ using System.Windows;
 
 namespace PV6900.Wpf.ViewModels
 {
-    public class MonitorMenuVM:BindableBase
+    public class MonitorMenuVM:BindableBase,IDisposable
     {
         private readonly DeviceMonitorService _deviceMonitorService;
         private readonly DeviceStorageService _deviceStorageService;
@@ -46,6 +46,17 @@ namespace PV6900.Wpf.ViewModels
         {
             if (!_deviceStorageService.Empty)
             { _deviceMonitorService.Stop(_deviceStorageService.Get()!); }
+        }
+
+        private bool _disposed = false;
+        public void Dispose()
+        {
+            if(!_disposed)
+            { 
+                StopMonitor();
+                _disposed = true;
+            }
+            GC.SuppressFinalize(this);
         }
     }
 }

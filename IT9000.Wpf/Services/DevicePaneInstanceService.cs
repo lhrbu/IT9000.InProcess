@@ -15,17 +15,17 @@ namespace IT9000.Wpf.Services
 {
     public class DevicePanelInstanceService
     {
-        private readonly PluginTypesRepository _pluginTypesRepository;
-        public DevicePanelInstanceService(PluginTypesRepository pluginTypesRepository)
-        { _pluginTypesRepository = pluginTypesRepository;}
+        private readonly PluginFactoriessRepository _pluginFactoriesRepository;
+        public DevicePanelInstanceService(PluginFactoriessRepository pluginFactoriesRepository)
+        { _pluginFactoriesRepository = pluginFactoriesRepository;}
 
         public IDevicePanel CreateDevicePanelInstance(Device device)
         {
-            ConcurrentDictionary<string,Type> typeModelMap = _pluginTypesRepository.ModelTypeMap;
+            ConcurrentDictionary<string,IDevicePanelFactory> modelFactoriesMap = _pluginFactoriesRepository.ModelFactoriesMap;
 
-            if(typeModelMap.ContainsKey(device.Model) && typeModelMap.TryGetValue(device.Model,out Type? deviceType))
+            if(modelFactoriesMap.ContainsKey(device.Model) && modelFactoriesMap.TryGetValue(device.Model,out IDevicePanelFactory? devicePanelFactory))
             {
-                return (Activator.CreateInstance(deviceType!) as IDevicePanel)!;
+                return devicePanelFactory!.CreateDevicePanel(device);
              }else{
                 throw new FileNotFoundException($"Can't found plugin dll of {device.Model}");
             }

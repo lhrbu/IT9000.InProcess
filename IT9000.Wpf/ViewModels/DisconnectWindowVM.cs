@@ -35,7 +35,7 @@ namespace IT9000.Wpf.ViewModels
                 foreach (Device device in devices)
                 {
                     TabControl tabControl = (Application.Current.MainWindow as MainWindow)!.TabControl_DevicePanels;
-                    IEnumerable<TabItem> tabItems = tabControl.Items.Cast<TabItem>();
+                    IEnumerable<TabItem> tabItems = tabControl.Items.Cast<TabItem>()!;
                     TabItem? tabItem = tabItems.FirstOrDefault(item => item.Header as string == device.Name);
                     if (tabItem is not null)
                     {

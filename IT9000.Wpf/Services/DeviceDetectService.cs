@@ -17,7 +17,7 @@ namespace IT9000.Wpf.Services
         public DeviceDetectService(
             IIteInteropService iteInteropService,
             PluginLoadService pluginLoadService,
-             PluginTypesRepository pluginTypesRepository)
+             PluginFactoriessRepository pluginTypesRepository)
         { 
             _iteInteropService = iteInteropService;
             _pluginLoadService = pluginLoadService;

@@ -40,12 +40,12 @@ namespace IT9000.Wpf.ViewModels
         {
             try
             {
-                IEnumerable<Device> devices = listBox.SelectedItems.Cast<Device>();
+                IEnumerable<Device> devices = listBox.SelectedItems.Cast<Device>()!;
                 //IEnumerable<IDevicePanel?> devicePanels = devices.Select(_devicePanelsRepository.FindDevicePanel);
                 foreach (Device device in devices)
                 {
                     IDevicePanel? devicePanel = _devicePanelsRepository.FindDevicePanel(device);
-                    if (devicePanel is null || (!devicePanel.CanRunProgram(device)))
+                    if (devicePanel is null || (!devicePanel.CanRunProgram()))
                     {
                         MessageBox.Show($"{device.Name} can't run program now.", "Error:");
                         return;
@@ -54,7 +54,7 @@ namespace IT9000.Wpf.ViewModels
                 foreach (Device device in devices)
                 {
                     IDevicePanel devicePanel = _devicePanelsRepository.FindDevicePanel(device)!;
-                    devicePanel.StartRunProgram(device);
+                    devicePanel.StartRunProgram();
                 }
             }catch(Exception e) { MessageBox.Show(e.ToString()); }
             finally { Window.GetWindow(listBox).Close(); }
@@ -62,12 +62,12 @@ namespace IT9000.Wpf.ViewModels
 
         public void SelectionsStop(ListBox listBox)
         {
-            IEnumerable<Device> devices = listBox.SelectedItems.Cast<Device>();
+            IEnumerable<Device> devices = listBox.SelectedItems.Cast<Device>()!;
             //IEnumerable<IDevicePanel?> devicePanels = devices.Select(_devicePanelsRepository.FindDevicePanel);
             foreach (Device device in devices)
             {
                 IDevicePanel? devicePanel = _devicePanelsRepository.FindDevicePanel(device);
-                if (devicePanel is null || (!devicePanel.CanStopProgram(device)))
+                if (devicePanel is null || (!devicePanel.CanStopProgram()))
                 {
                     MessageBox.Show($"{device.Name} can't stop program now.", "Error:");
                     return;
@@ -76,7 +76,7 @@ namespace IT9000.Wpf.ViewModels
             foreach (Device device in devices)
             {
                 IDevicePanel devicePanel = _devicePanelsRepository.FindDevicePanel(device)!;
-                devicePanel.StopRunProgram(device);
+                devicePanel.StopRunProgram();
             }
             Window.GetWindow(listBox).Close();
         }

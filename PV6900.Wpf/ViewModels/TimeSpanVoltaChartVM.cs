@@ -13,12 +13,12 @@ namespace PV6900.Wpf.ViewModels
     public class TimeSpanVoltaChartVM
     {
         private readonly DeviceMonitorService _deviceMonitorService;
-        //private readonly EventHandler<DataMeasureEventArgs> _onDataMeasured;
+        private readonly EventHandler<DataMeasureEventArgs> _onMeasured;
         public TimeSpanVoltaChartVM(DeviceMonitorService deviceMonitorService)
         {
             _deviceMonitorService = deviceMonitorService;
-            //_onDataMeasured = (sender, e) => FetchPoint(e.Volta);
-            _deviceMonitorService.AfterDataMeasure += (sender, e) => FetchPoint(e.Volta);
+            _onMeasured = (sender, e) => FetchPoint(e.Volta);
+            _deviceMonitorService.AfterDataMeasure +=  _onMeasured;
         }
 
 
@@ -48,15 +48,15 @@ namespace PV6900.Wpf.ViewModels
             }
         }
 
-        //private bool _disposed = false;
-        //public void Dispose()
-        //{
-        //    if (!_disposed)
-        //    {
-        //        _deviceMonitorService.AfterDataMeasure -= _onDataMeasured;
-        //        _disposed = true;
-        //    }
-        //    GC.SuppressFinalize(this);
-        //}
+        private bool _disposed = false;
+        public void Dispose()
+        {
+           if (!_disposed)
+           {
+               _deviceMonitorService.AfterDataMeasure -= _onMeasured;
+               _disposed = true;
+           }
+           GC.SuppressFinalize(this);
+        }
     }
 }

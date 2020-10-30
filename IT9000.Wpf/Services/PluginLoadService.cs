@@ -15,9 +15,10 @@ namespace IT9000.Wpf.Services
 {
     public class PluginLoadService
     {
-        private readonly PluginTypesRepository _pluginsRepository;
-        public PluginLoadService(PluginTypesRepository pluginsRepository)
-        { _pluginsRepository=pluginsRepository;}
+        private readonly PluginFactoriessRepository _pluginFactoriesRepository;
+        public PluginLoadService(
+            PluginFactoriessRepository pluginFactoriesRepository)
+        { _pluginFactoriesRepository=pluginFactoriesRepository;}
         private string PluginsDirectory => Path.Combine(
             Environment.CurrentDirectory, "Plugins");
         private string GetPluginDllPath(string deviceModel) => Path.Combine(
@@ -28,23 +29,25 @@ namespace IT9000.Wpf.Services
 
         public void Load(Device device)
         {
-            if(!_pluginsRepository.ModelTypeMap.ContainsKey(device.Model))
+            if(!_pluginFactoriesRepository.ModelFactoriesMap.ContainsKey(device.Model))
             {
-                //LoadDependency(device);
-                //ConfiguredTaskAwaitable awaitable = Task.Run(()=>LoadDependency(device)).ConfigureAwait(false);
+                
                 foreach(Type type in Assembly.LoadFrom(GetPluginDllPath(device.Model)).GetTypes())
                 {
-                    Type? idevicePanelType = type.GetInterface(nameof(IDevicePanel));
-                    if(idevicePanelType is not null)
-                    { _pluginsRepository.ModelTypeMap.TryAdd(device.Model,type); }
+                    Type? idevicePanelFactoryType = type.GetInterface(nameof(IDevicePanelFactory));
+                    if(idevicePanelFactoryType is not null)
+                    { 
+                        IDevicePanelFactory devicePanelFactory= 
+                            (Activator.CreateInstance(type) as IDevicePanelFactory)!;
+                        _pluginFactoriesRepository.ModelFactoriesMap.TryAdd(device.Model,devicePanelFactory);
+                    }
                 }
-                //awaitable.GetAwaiter().GetResult();
             }
         }
 
         public void LoadDependency(Device device)
         {
-            if (!_pluginsRepository.ModelTypeMap.ContainsKey(device.Model))
+            if (!_pluginFactoriesRepository.ModelFactoriesMap.ContainsKey(device.Model))
             {
                 IEnumerable<string> dllPaths = Directory.GetFiles(GetPluginDependencyDirectory(device.Model)).Where(item => item.EndsWith(".dll"));
                 foreach (string dllPath in dllPaths)

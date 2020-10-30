@@ -58,13 +58,12 @@ namespace IT9000.Wpf.ViewModels
                     TabItem tabItem = new TabItem()
                     {
                         Header = device.Name,
-                        Content = devicePanel.CreateDevicePanelUI(device),
+                        Content = devicePanel.CreateDevicePanelUI(),
                         VerticalContentAlignment = VerticalAlignment.Top
                     };
 
                     
                     tabControl.Items.Add(tabItem);
-                    //tabControl.SelectedItem = tabItem;
                     lastTabItem = tabItem;
                     _devicesRepository.DeviceOnline(device, devicePanel);
                 }

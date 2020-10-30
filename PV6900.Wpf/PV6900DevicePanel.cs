@@ -22,131 +22,44 @@ namespace PV6900.Wpf
     public class PV6900DevicePanel:IDevicePanel
     {
         private DevicePanelWindowsRepository _devicePanelWindowsRepository=null!;
-        public IServiceProvider ServiceProvider=> _scope.ServiceProvider;
-        public IConfiguration Configuration => _configuration;
+        public IServiceScope Scope {get;set;} = null!;
+        public Device Device {get;}
+        private readonly ProgramDashboardVM _programDashboardVM;
+        public PV6900DevicePanel(
+            DeviceStorageService deviceStorageService,
+            ProgramDashboardVM programDashboardVM
+        )
+        { 
+            Device = deviceStorageService.Get()!;
+            _programDashboardVM = programDashboardVM;
+        }
 
-        //private IServiceScope _serviceScope=null!;
-        private Device _device = null!;
-
-        private IServiceScope _scope = null!;
-
-        private static ConcurrentDictionary<string, IServiceScope> _deviceScopesMap = new();
-
-        public UIElement CreateDevicePanelUI(Device device)
+        public UIElement CreateDevicePanelUI()
         {
-            _device = device;
-            Initialize();
-            _devicePanelWindowsRepository = _globalServiceProvider.GetRequiredService<DevicePanelWindowsRepository>();
-            
-            if(_deviceScopesMap.TryGetValue(device.Name,out IServiceScope? scope))
-            {
-                if(scope is null) { throw new InvalidOperationException(); }
-                return scope.ServiceProvider.GetRequiredService<PV6900Window>();
-            }
-            else
-            {
-                IServiceScope deviceScope = _globalServiceProvider.CreateScope();
-                deviceScope.ServiceProvider.GetRequiredService<DeviceStorageService>().Set(device);
-                PV6900Window devicePanel = deviceScope.ServiceProvider.GetRequiredService<PV6900Window>();
-                _devicePanelWindowsRepository.DevicePanelWindowMap.TryAdd(device.Name, devicePanel);
-                return devicePanel;
-            }
+            PV6900Window devicePanelWindow = Scope.ServiceProvider.GetRequiredService<PV6900Window>();
+            return devicePanelWindow;
         }
        
-       public void Disconnect()
-       {
-            if(_devicePanelWindowsRepository.DevicePanelWindowMap.ContainsKey(_device.Name))
-            {
-                var programVM = ServiceProvider.GetRequiredService<ProgramDashboardVM>();
-                programVM.StopProgram();
-                programVM.ManagedProgramSteps.Clear();
-                programVM.OuterLoopCount = 1;
-                programVM.CurrentManagedProgramStep = null;
-                programVM.InRunning = false;
-            }
-       }
-
-
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddScoped<PV6900Window>();
-            services.AddScoped<TimeSpanCharts>();
-
-            services.AddScoped<PV6900WindowVM>();
-            services.AddScoped<TimeSpanVoltaChartVM>();
-            services.AddScoped<TimeSpanAmpereChartVM>();
-            services.AddScoped<TimeSpanGaugesVM>();
-            services.AddScoped<ProgramDashboardVM>();
-            services.AddScoped<MonitorMenuVM>();
-
-            services.AddTransient<ManagedProgramParseService>();
-           
-            services.AddTransient<DeviceLinkService>();
-            services.AddTransient<DeviceLimitsQueryService>();
-            services.AddTransient<ProgramExecutor>();
-
-            services.AddTransient<DeviceSettingDataQueryService>();
-            services.AddTransient<DeviceDataMeasureService>();
-
-
-            services.AddScoped<DeviceStorageService>();
-            services.AddScoped<DeviceMonitorService>();
-
-            services.AddSingleton<DevicePanelWindowsRepository>();
-
-#if DEBUG
-            services.AddSingleton<IIteInteropService, MockIteInteropService>();
-#else
-            services.AddSingleton<IIteInteropService, PV6900IteInteropService>();
-#endif
-        }
-
-
-        private static bool _initializedFlag = false;
-        private static IServiceProvider _globalServiceProvider=null!;
-        private static IConfiguration _configuration=null!;
+       public void Disconnect() => Scope.Dispose();        
        
-        private void Initialize()
+        public void StartRunProgram()
         {
-            if (!_initializedFlag)
-            {
-                Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(
-         "MzM2ODE5QDMxMzgyZTMzMmUzMGsydzdtUHFwdmVkKzgwUUQ2Y3pXSzdRcHpIUHRPSzJjUUw0M01qcldYb1U9");
-                IServiceCollection services = new ServiceCollection();
-                _configuration = new ConfigurationBuilder()
-                    .AddJsonFile("appsettings", true, true)
-                    .Build();
-                services.AddSingleton(_configuration);
-                ConfigureServices(services);
-                _globalServiceProvider = services.BuildServiceProvider();
-                _initializedFlag = true;
-            }
-        }
-
-        public void StartRunProgram(Device device)
-        {
-            PV6900Window? devicePanelWindow = _devicePanelWindowsRepository
-                .DevicePanelWindowMap.GetValueOrDefault(device.Name);
+            PV6900Window? devicePanelWindow = Scope.ServiceProvider.GetRequiredService<PV6900Window>();
             if (devicePanelWindow is not null) {
                 devicePanelWindow.Button_StartRunProgram.Command.Execute(devicePanelWindow.DataGrid_ProgramEditor);
             }
         }
-
-        public bool CanRunProgram(Device device)
+        public bool CanRunProgram()
         {
-            PV6900Window? devicePanelWindow = _devicePanelWindowsRepository
-                .DevicePanelWindowMap.GetValueOrDefault(device.Name);
+            PV6900Window? devicePanelWindow = Scope.ServiceProvider.GetRequiredService<PV6900Window>();
             if(devicePanelWindow is not null)
-            {
-                return devicePanelWindow.Button_StartRunProgram.IsEnabled;
-            }
+            { return devicePanelWindow.Button_StartRunProgram.IsEnabled;}
             else { return false; }
         }
 
-        public void StopRunProgram(Device device)
+        public void StopRunProgram()
         {
-            PV6900Window? devicePanelWindow = _devicePanelWindowsRepository
-                            .DevicePanelWindowMap.GetValueOrDefault(device.Name);
+            PV6900Window? devicePanelWindow = Scope.ServiceProvider.GetRequiredService<PV6900Window>();
             if (devicePanelWindow is not null)
             {
                 Application.Current.Dispatcher.Invoke(() =>
@@ -155,10 +68,9 @@ namespace PV6900.Wpf
             }
         }
 
-        public bool CanStopProgram(Device device)
+        public bool CanStopProgram()
         {
-            PV6900Window? devicePanelWindow = _devicePanelWindowsRepository
-               .DevicePanelWindowMap.GetValueOrDefault(device.Name);
+            PV6900Window? devicePanelWindow = Scope.ServiceProvider.GetRequiredService<PV6900Window>();
             if(devicePanelWindow is not null)
             {
                 return devicePanelWindow.Button_StopRunProgram.IsEnabled;

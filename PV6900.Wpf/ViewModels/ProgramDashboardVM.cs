@@ -19,7 +19,7 @@ using System.Windows.Threading;
 
 namespace PV6900.Wpf.ViewModels
 {
-    public class ProgramDashboardVM:BindableBase
+    public class ProgramDashboardVM:BindableBase,IDisposable
     {
         private readonly ManagedProgramParseService _managedProgramParseService;
         private readonly ProgramExecutor _programExecutor;
@@ -99,7 +99,19 @@ namespace PV6900.Wpf.ViewModels
         }
         private ManagedProgramStep? _currentManagedProgramStep;
 
-        
+        private bool _disposed = false;
+        public void Dispose()
+        {
+            if(!_disposed)
+            {
+                ManagedProgramSteps.Clear();
+                StopProgram();
+                CurrentManagedProgramStep = null;
+                OuterLoopCount = 1;
+                _disposed = true;
+            }
+            GC.SuppressFinalize(this);
+        }
 
     }
 }

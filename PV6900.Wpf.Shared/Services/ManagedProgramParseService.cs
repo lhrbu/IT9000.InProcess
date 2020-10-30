@@ -9,9 +9,41 @@ namespace PV6900.Wpf.Shared.Services
 {
     public class ManagedProgramParseService
     {
+        private int GetProgramStepsCount(ManagedProgram managedProgram)
+        {
+            int count = 0;
+            int innerLoopCount = 0;
+            int innerLoopStepsCount = 0;
+            bool intoInnerLoop = false;
+            foreach(ManagedProgramStep managedStep in managedProgram.ManagedProgramSteps)
+            {
+                switch (managedStep.InnerLoopFlag)
+                {
+                    case InnerLoopFlag.None:
+                        if(!intoInnerLoop){++count;}
+                        else{++innerLoopStepsCount;}
+                        break;
+                    case InnerLoopFlag.On:
+                        innerLoopCount = managedStep.InnerLoopCount;
+                        ++innerLoopStepsCount;
+                        intoInnerLoop = true;
+                        break;
+                    case InnerLoopFlag.Off:
+                        ++innerLoopStepsCount;
+                        count+=(innerLoopCount*innerLoopStepsCount);
+                        innerLoopCount = 0;
+                        innerLoopStepsCount = 0;
+                        intoInnerLoop = false;
+                        break;
+                }
+            }
+            return count;
+        }
         public Program ParseManagedProgram(ManagedProgram managedProgram)
         {
-            List<ProgramStepWithSourceMap> programSteps = new();
+            int programStepsCount = GetProgramStepsCount(managedProgram);
+            System.Windows.MessageBox.Show($"Steps count:{programStepsCount}");
+            List<ProgramStepWithSourceMap> programSteps = new(programStepsCount);
 
             List<ManagedProgramStep> innerLoopStepsBuffer = new();
             bool intoInnerLoop = false;
