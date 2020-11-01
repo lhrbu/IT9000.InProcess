@@ -22,12 +22,14 @@ namespace PV6900.Wpf.ViewModels
         public MonitorMenuVM MonitorMenuVM { get; }
         public TimeSpanVoltaChartVM TimeSpanVoltaChartVM{get;}
         public TimeSpanAmpereChartVM TimeSpanAmpereChartVM {get;}
+        public ProgramRunningStatusPanelVM ProgramRunningStatusPanelVM { get; }
         public PV6900WindowVM(
             TimeSpanGaugesVM timeSpanGaugesVM,
             ProgramDashboardVM programDashboardVM,
             MonitorMenuVM monitorMenuVM,
             TimeSpanVoltaChartVM timeSpanVoltaChartVM,
-            TimeSpanAmpereChartVM timeSpanAmpereChartVM
+            TimeSpanAmpereChartVM timeSpanAmpereChartVM,
+            ProgramRunningStatusPanelVM programRunningStatusPanelVM
             )
         { 
             TimeSpanGaugesVM = timeSpanGaugesVM;
@@ -35,6 +37,7 @@ namespace PV6900.Wpf.ViewModels
             MonitorMenuVM = monitorMenuVM;
             TimeSpanVoltaChartVM =timeSpanVoltaChartVM;
             TimeSpanAmpereChartVM = timeSpanAmpereChartVM;
+            ProgramRunningStatusPanelVM = programRunningStatusPanelVM;
         }
 
         

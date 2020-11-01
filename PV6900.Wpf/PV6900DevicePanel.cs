@@ -21,7 +21,7 @@ namespace PV6900.Wpf
 {
     public class PV6900DevicePanel:IDevicePanel
     {
-        private DevicePanelWindowsRepository _devicePanelWindowsRepository=null!;
+
         public IServiceScope Scope {get;set;} = null!;
         public Device Device {get;}
         private readonly ProgramDashboardVM _programDashboardVM;

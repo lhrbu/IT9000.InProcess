@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PV6900.Wpf.Shared", "PV6900
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PV6900.Wpf", "PV6900.Wpf\PV6900.Wpf.csproj", "{1FFCEAA7-07DE-4800-8028-C99B645CF55C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IT9000.Wpf", "IT9000.Wpf\IT9000.Wpf.csproj", "{45C80093-44B2-4170-AB32-78063F50B18E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IT9000.Wpf", "IT9000.Wpf\IT9000.Wpf.csproj", "{45C80093-44B2-4170-AB32-78063F50B18E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DebugConsole", "DebugConsole\DebugConsole.csproj", "{BC5380C3-D805-4F8B-8AC9-FE92D08B45BA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{45C80093-44B2-4170-AB32-78063F50B18E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{45C80093-44B2-4170-AB32-78063F50B18E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{45C80093-44B2-4170-AB32-78063F50B18E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC5380C3-D805-4F8B-8AC9-FE92D08B45BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC5380C3-D805-4F8B-8AC9-FE92D08B45BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC5380C3-D805-4F8B-8AC9-FE92D08B45BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC5380C3-D805-4F8B-8AC9-FE92D08B45BA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

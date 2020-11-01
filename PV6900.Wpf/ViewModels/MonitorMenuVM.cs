@@ -35,14 +35,14 @@ namespace PV6900.Wpf.ViewModels
         public DelegateCommand StartMonitorCommand { get; }
         public DelegateCommand StopMonitorCommand { get; }
 
-        public void StartMonitor()
+        private void StartMonitor()
         {
             if (InMonitor || _deviceStorageService.Empty) { return; }
             InMonitor = true;
             _deviceMonitorService.StartAsync(_deviceStorageService.Get()!)
                 .ContinueWith(task => InMonitor = false).ConfigureAwait(false);
         }
-        public void StopMonitor()
+        private void StopMonitor()
         {
             if (!_deviceStorageService.Empty)
             { _deviceMonitorService.Stop(_deviceStorageService.Get()!); }

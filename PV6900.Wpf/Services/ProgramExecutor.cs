@@ -28,30 +28,96 @@ namespace PV6900.Wpf.Services
         private CancellationTokenSource? _cancellationTokenSource;
 
         public EventHandler<ProgramStepExecutingEventArgs>? ProgramStepExecuting;
+        public EventHandler<RunningTimeMeasuredEventArgs>? RunningTimeMeasured;
+        public EventHandler<CurrentStepRunningSecondsEventArgs>? CurrentStepRunningSecondsMeasured;
+        public EventHandler<OuterLoopCurrentChangedEventArgs>? OuterLoopCurrentChanged;
+        public EventHandler<InnerLoopCurrentChangedEventArgs>? InnerLoopCurrentChanged;
+        public EventHandler<CurrentStepDurationEventArgs>? CurrentStepDurationChanged;
+        public EventHandler<InnerLoopCountChangedEventArgs>? InnerLoopCountChanged;
+        public EventHandler<OuterLoopCountChangedEventArgs>? OuterLoopCountChanged;
+        public EventHandler<ProgramDurationChangedEventArgs>? ProgramDurationChanged;
 
-        
+        private DateTimeOffset _startTimeOffset;
+        private DateTimeOffset _currentStepStartOffset;
+
         public async Task ExecuteProgramAsync(Device device, Program program)
         {
-            
              _cancellationTokenSource = new();
+            _startTimeOffset = DateTimeOffset.Now;
+            _currentStepStartOffset = DateTimeOffset.Now;
+            _ =MonitorRunningStatusAsync(_cancellationTokenSource.Token)
+                .ConfigureAwait(false);
+
+            OuterLoopCountChanged?.Invoke(device, new(program.LoopCount));
+            ProgramDurationChanged?.Invoke(device, new(TimeSpan.FromSeconds(
+                program.ProgramStepsWithSourceMap.Sum(item => item.ProgramStep.Duration))));
+
+            bool intoInnerLoop = false;
+            
             foreach (int outerLoopIndex in Enumerable.Range(0,program.LoopCount))
             {
-                foreach(ProgramStepWithSourceMap stepWithSourceMap in program.ProgramStepsWithSourceMap)
+                OuterLoopCurrentChanged?.Invoke(device, new(outerLoopIndex + 1));
+
+                int innerLoopCount = 1;
+                int innerLoopCurrent = 1;
+                foreach (ProgramStepWithSourceMap stepWithSourceMap in program.ProgramStepsWithSourceMap)
                 {
-                    if (!_cancellationTokenSource.Token.IsCancellationRequested)
+                    _stopwatch.Reset();
+                    _currentStepStartOffset = DateTimeOffset.Now;
+
+                    // Record current step duration
+                    CurrentStepDurationChanged?.Invoke(device, new(stepWithSourceMap.ProgramStep.Duration));
+
+                    // Start record inner loop current
+                    switch(stepWithSourceMap.ManagedProgramStep.InnerLoopFlag)
                     {
-                        CurrentManagedProgramStep = stepWithSourceMap.ManagedProgramStep;
-                        ProgramStepExecuting?.Invoke(device,new(stepWithSourceMap.ManagedProgramStep));
-                        ProgramStepAssemblyCode assemblyCode = AssemblyProgramStep(stepWithSourceMap.ProgramStep);
-                        await ExecuteOneProgramStepAssemblyCodeAsync(device, assemblyCode,_cancellationTokenSource.Token);
-                    }
-                    else
-                    {
-                        return;
+                        case InnerLoopFlag.On:
+                            if (!intoInnerLoop)
+                            {
+                                intoInnerLoop = true;
+                                innerLoopCount = stepWithSourceMap.ManagedProgramStep.InnerLoopCount;
+                                innerLoopCurrent = 1;
+                                InnerLoopCurrentChanged?.Invoke(device, new(innerLoopCurrent));
+                            }
+                            else
+                            {
+                                InnerLoopCurrentChanged?.Invoke(device, new(++innerLoopCurrent));
+                            }
+                        break;
+                        case InnerLoopFlag.Off:
+                            if (innerLoopCurrent == innerLoopCount)
+                            {
+                                innerLoopCurrent = 1;
+                                intoInnerLoop = false;
+                                innerLoopCount = 1;
+                            }
+                        break;
+                        case InnerLoopFlag.None:
+                            if (!intoInnerLoop) {
+                                innerLoopCurrent = 1;
+                                innerLoopCount = 1;
+                                InnerLoopCurrentChanged?.Invoke(device, new(innerLoopCurrent));
+                            }
+                         break;
                     }
 
+                    // Record inner loop count changed
+                    InnerLoopCountChanged?.Invoke(device, new(innerLoopCount));
+
+                    CurrentManagedProgramStep = stepWithSourceMap.ManagedProgramStep;
+                    ProgramStepExecuting?.Invoke(device, new(stepWithSourceMap.ManagedProgramStep));
+
+                    ProgramStepAssemblyCode assemblyCode = AssemblyProgramStep(stepWithSourceMap.ProgramStep);
+                    ExecuteOneProgramStepAssemblyCode(device, assemblyCode);
+
+                    int durationInMS = (int)(assemblyCode.Duration * 1000);
+                    int endTime = (int)_stopwatch.ElapsedMilliseconds;
+                    int waitTime = durationInMS - endTime;
+                    if (waitTime > 0)
+                    { await Task.Delay(waitTime, _cancellationTokenSource.Token);}
                 }
             }
+            if (!_cancellationTokenSource.IsCancellationRequested) { _cancellationTokenSource.Cancel(); }
         }
         public ProgramStepAssemblyCode AssemblyProgramStep(ProgramStep programStep) =>
             new ProgramStepAssemblyCode
@@ -61,42 +127,52 @@ namespace PV6900.Wpf.Services
                 Duration = programStep.Duration
             };
 
-        public async ValueTask ExecuteOneProgramStepAssemblyCodeAsync(Device device, ProgramStepAssemblyCode assemblyCode,
-            CancellationToken token)
+        private void ExecuteOneProgramStepAssemblyCode(Device device, ProgramStepAssemblyCode assemblyCode)
         {
-            _stopwatch.Reset();
-            int startTime = (int)_stopwatch.ElapsedMilliseconds;
-            int durationInMS = (int)(assemblyCode.Duration * 1000);
-
             _iteInteropService.WaitHandle.WaitOne();
             int errNo = _iteInteropService.IteDC_WriteCmd(device.Address, assemblyCode.SetVoltaCmd);
             errNo = _iteInteropService.IteDC_WriteCmd(device.Address, assemblyCode.SetAmpereCmd);
             _iteInteropService.WaitHandle.Set();
-
-            int endTime = (int)_stopwatch.ElapsedMilliseconds;
-            int waitTime = durationInMS - (endTime - startTime);
-            if (waitTime > 0)
-            {
-                await CheckCancelTokenDuringWaiting(waitTime, token);
-            }
         }
 
-        private async ValueTask CheckCancelTokenDuringWaiting(int waitTime,CancellationToken token)
+        private async Task MonitorRunningStatusAsync(CancellationToken token)
         {
-            while(!token.IsCancellationRequested && waitTime>0)
+            while (true)
             {
-                if (waitTime > 100)
-                {
-                    waitTime -= 100;
-                    await Task.Delay(100);
-                }
-                else { 
-                    
-                    await Task.Delay(waitTime);
-                    waitTime = 0;
-                }
+                TimeSpan runningTime = DateTimeOffset.Now - _startTimeOffset;
+                RunningTimeMeasured?.Invoke(this, new(runningTime));
+                double currentStepRunningSeconds = (DateTimeOffset.Now - _currentStepStartOffset).TotalSeconds;
+                CurrentStepRunningSecondsMeasured?.Invoke(this, new(currentStepRunningSeconds));
+                await Task.Delay(65,token);
             }
         }
+
+
+        //private async ValueTask CheckCancelTokenDuringWaiting(int waitTime,CancellationToken token)
+        //{
+           
+        //    while(!token.IsCancellationRequested && waitTime>0)
+        //    {
+        //        _stopwatch.Reset();
+
+        //        TimeSpan runningTime = DateTimeOffset.Now - _startTimeOffset;
+        //        AfterRunningTimeMeasured?.Invoke(this, new(runningTime));
+        //        double currentStepRunningSeconds = (DateTimeOffset.Now - _currentStepStartOffset).TotalSeconds;
+        //        AfterCurrentStepRunningSecondsMeasured?.Invoke(this, new(currentStepRunningSeconds));
+        //        int runningMS = (int)_stopwatch.ElapsedMilliseconds;
+
+        //        int tickTime = 100 + runningMS;
+        //        if (waitTime > tickTime)
+        //        {
+        //            waitTime -= (tickTime);
+        //            await Task.Delay(tickTime);
+        //        }
+        //        else { 
+        //            await Task.Delay(waitTime);
+        //            waitTime = 0;
+        //        }
+        //    }
+        //}
 
         public void StopProgram() => _cancellationTokenSource?.Cancel();
 

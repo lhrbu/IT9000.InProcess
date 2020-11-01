@@ -40,6 +40,7 @@ namespace PV6900.Wpf
                 Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(
                 "MzM2ODE5QDMxMzgyZTMzMmUzMGsydzdtUHFwdmVkKzgwUUQ2Y3pXSzdRcHpIUHRPSzJjUUw0M01qcldYb1U9");
 
+                
                 IServiceCollection services = new ServiceCollection();
                 IConfiguration configuration = new ConfigurationBuilder()
                     .AddJsonFile("appsettings", true, true)
@@ -65,12 +66,13 @@ namespace PV6900.Wpf
             services.AddScoped<TimeSpanGaugesVM>();
             services.AddScoped<ProgramDashboardVM>();
             services.AddScoped<MonitorMenuVM>();
+            services.AddScoped<ProgramRunningStatusPanelVM>();
 
             services.AddTransient<ManagedProgramParseService>();
            
             services.AddTransient<DeviceLinkService>();
             services.AddTransient<DeviceLimitsQueryService>();
-            services.AddTransient<ProgramExecutor>();
+            services.AddScoped<ProgramExecutor>();
 
             services.AddTransient<DeviceSettingDataQueryService>();
             services.AddTransient<DeviceDataMeasureService>();

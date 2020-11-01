@@ -38,7 +38,7 @@ namespace PV6900.Wpf.Services
         public event EventHandler<SettingDataQueryEventArgs>? AfterSettingDataQuery;
         public event EventHandler<DataMeasureEventArgs>? AfterDataMeasure;
 
-        public int IntervalMS { get; init; } = 100;
+        public int IntervalMS { get; init; } = 65;
 
         private CancellationTokenSource? _cancellationTokenSource;
 

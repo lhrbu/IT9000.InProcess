@@ -42,7 +42,6 @@ namespace PV6900.Wpf.Shared.Services
         public Program ParseManagedProgram(ManagedProgram managedProgram)
         {
             int programStepsCount = GetProgramStepsCount(managedProgram);
-            System.Windows.MessageBox.Show($"Steps count:{programStepsCount}");
             List<ProgramStepWithSourceMap> programSteps = new(programStepsCount);
 
             List<ManagedProgramStep> innerLoopStepsBuffer = new();
@@ -82,6 +81,7 @@ namespace PV6900.Wpf.Shared.Services
         {
             if(!ValidateInnerLoopSteps(managedProgramSteps))
             { throw new ArgumentException("Input steps are not a inner loop", nameof(managedProgramSteps)); }
+
             IEnumerable<ProgramStepWithSourceMap> loopBatchSteps = managedProgramSteps.Select(managedStep => ParseNoneLoopStep(managedStep));
             int innerLoopCount = managedProgramSteps.First().InnerLoopCount;
 

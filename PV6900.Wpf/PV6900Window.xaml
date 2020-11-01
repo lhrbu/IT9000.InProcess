@@ -87,6 +87,7 @@
                             CanUserDeleteRows="False"
                             AutoGenerateColumns="False"
                             CanUserSortColumns="False"
+                            IsReadOnly="{Binding InRunning}"
                             Name="DataGrid_ProgramEditor">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Volta" Binding="{Binding Volta}" Width="*"/>
@@ -147,6 +148,34 @@
                             IsEnabled="{Binding InRunning}"
                             />
                     </StackPanel>
+                    <Border BorderBrush="Black" BorderThickness="0.5"  CornerRadius="16"
+                            Margin="24 32 0 0"
+                            >
+                        <StackPanel Margin="48 12" DataContext="{Binding ProgramRunningStatusPanelVM}"
+                                    >
+                            <controls:StatusBar  Margin="0 8" MinHeight="32"
+                                Header="Current Step Running(s):" 
+                                CurrentValue="{Binding  CurrentStepRunningSeconds,StringFormat={}{0:N1}}"
+                                TotalValue="{Binding  CurrentStepDuration,StringFormat={}{0:N1}}"/>
+
+                            <controls:StatusBar  Margin="0 8" MinHeight="32" 
+                                Header="Inner Loop Current:" 
+                                CurrentValue="{Binding  InnerLoopCurrent}"
+                                TotalValue="{Binding  InnerLoopCount}"/>
+
+                            <controls:StatusBar Margin="0 8" MinHeight="32" 
+                                Header="Outer Loop Current:" 
+                                CurrentValue="{Binding  OuterLoopCurrent}"
+                                TotalValue="{Binding  OuterLoopCount}"/>
+
+                            <controls:StatusBar Margin="0 8" MinHeight="32" 
+                                Header="Total running time(s):" 
+                                CurrentValue="{Binding RunningTimeSpan,StringFormat=hh\\:mm\\:ss}"
+                                TotalValue="{Binding ProgramDuration,StringFormat=hh\\:mm\\:ss}"/>
+
+
+                        </StackPanel>
+                    </Border>
                 </StackPanel>
         </Grid>
 

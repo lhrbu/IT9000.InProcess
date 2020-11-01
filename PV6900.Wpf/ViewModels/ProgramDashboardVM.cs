@@ -26,18 +26,24 @@ namespace PV6900.Wpf.ViewModels
         private readonly DeviceStorageService _deviceStorageService;
         private readonly TimeSpanVoltaChartVM _timeSpanVoltaChartVM;
         private readonly TimeSpanAmpereChartVM _timeSpanAmpereChartVM;
+        private readonly MonitorMenuVM _monitorMenuVM;
+        public ProgramRunningStatusPanelVM ProgramRunningStatusPanelVM { get; }
         public ProgramDashboardVM(
             ManagedProgramParseService managedProgramParseService,
             ProgramExecutor programExecutor,
             DeviceStorageService deviceStorageService,
+            MonitorMenuVM monitorMenuVM,
             TimeSpanVoltaChartVM timeSpanVoltaChartVM,
-            TimeSpanAmpereChartVM timeSpanAmpereChartVM)
+            TimeSpanAmpereChartVM timeSpanAmpereChartVM,
+            ProgramRunningStatusPanelVM programRunningStatusPanelVM)
         {
             _managedProgramParseService = managedProgramParseService;
             _programExecutor = programExecutor;
             _deviceStorageService = deviceStorageService;
             _timeSpanVoltaChartVM = timeSpanVoltaChartVM;
             _timeSpanAmpereChartVM = timeSpanAmpereChartVM;
+            _monitorMenuVM = monitorMenuVM;
+            ProgramRunningStatusPanelVM = programRunningStatusPanelVM;
 
             AddCommand = new(() =>ManagedProgramSteps.Add(new()));
             DeleteCommand = new((dataGrid => ManagedProgramSteps
@@ -65,12 +71,15 @@ namespace PV6900.Wpf.ViewModels
         private int _outerLoopCount = 1;
 
         private Dispatcher _Dispatcher => Application.Current.Dispatcher;
-        public void StartProgram(DataGrid dataGrid)
+        private void StartProgram(DataGrid dataGrid)
         {
             if (InRunning) { return; }
 
             _timeSpanVoltaChartVM.Reset();
             _timeSpanAmpereChartVM.Reset();
+            
+            if(!_monitorMenuVM.InMonitor)
+            { _Dispatcher.Invoke(() => _monitorMenuVM.StartMonitorCommand.Execute()); }
 
             _Dispatcher.Invoke(() =>
             { dataGrid.SetBinding(DataGrid.SelectedItemProperty, new Binding(nameof(CurrentManagedProgramStep)));});
@@ -90,7 +99,7 @@ namespace PV6900.Wpf.ViewModels
             InRunning = true;
         }
 
-        public void StopProgram() => _programExecutor.StopProgram();
+        private void StopProgram() => _programExecutor.StopProgram();
 
         public ManagedProgramStep? CurrentManagedProgramStep
         {
