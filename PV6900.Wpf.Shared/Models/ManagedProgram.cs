@@ -8,7 +8,7 @@ namespace PV6900.Wpf.Shared.Models
 {
     public class ManagedProgram
     {
-        public int LoopCount { get; init; } = 1;
-        public List<ManagedProgramStep> ManagedProgramSteps = new();
+        public int OuterLoopCount { get; init; } = 1;
+        public List<ManagedProgramStep> ManagedProgramSteps { get; init; } = new();
     }
 }

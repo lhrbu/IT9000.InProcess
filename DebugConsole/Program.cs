@@ -25,7 +25,7 @@ namespace DebugConsole
                 new ManagedProgramStep {InnerLoopFlag=InnerLoopFlag.None},
                 new ManagedProgramStep{InnerLoopFlag=InnerLoopFlag.Off},
             };
-            ManagedProgram managedProgram = new () { LoopCount = 1, ManagedProgramSteps = steps };
+            ManagedProgram managedProgram = new () { OuterLoopCount = 1, ManagedProgramSteps = steps };
 
             ManagedProgramParseService parser = new();
             var program= parser.ParseManagedProgram(managedProgram);

@@ -16,6 +16,12 @@ using System.Threading;
 using PV6900.Wpf.Models;
 using System.Runtime.CompilerServices;
 using System.Windows.Threading;
+using System.IO;
+using System.Text.Json;
+using Microsoft.Win32;
+using Syncfusion.Windows.Tools.Controls;
+using Prism.Services.Dialogs;
+using PV6900.Wpf.Views;
 
 namespace PV6900.Wpf.ViewModels
 {
@@ -57,6 +63,10 @@ namespace PV6900.Wpf.ViewModels
                 CurrentManagedProgramStep = null;
                 CurrentManagedProgramStep=e.CurrentManagedProgramStep;
             };
+
+            ExportProgramCommand = new(async()=>await ExportProgramAsync());
+            ImportProgramCommand = new(async () => await ImportProgramAsync());
+
         }
         public ObservableCollection<ManagedProgramStep> ManagedProgramSteps { get; } = new() { new()};
 
@@ -64,6 +74,8 @@ namespace PV6900.Wpf.ViewModels
         public DelegateCommand<DataGrid> DeleteCommand { get; }
         public DelegateCommand<DataGrid> StartCommand { get; }
         public DelegateCommand StopCommand { get; }
+        public DelegateCommand ExportProgramCommand { get; }
+        public DelegateCommand ImportProgramCommand { get; }
 
         public bool InRunning { get => _inRunning; set => SetProperty(ref _inRunning, value); }
         private bool _inRunning =false;
@@ -84,7 +96,7 @@ namespace PV6900.Wpf.ViewModels
             _Dispatcher.Invoke(() =>
             { dataGrid.SetBinding(DataGrid.SelectedItemProperty, new Binding(nameof(CurrentManagedProgramStep)));});
             Program program = _managedProgramParseService.ParseManagedProgram(new ManagedProgram
-            { LoopCount = OuterLoopCount, ManagedProgramSteps = ManagedProgramSteps.ToList() });
+            { OuterLoopCount = OuterLoopCount, ManagedProgramSteps = ManagedProgramSteps.ToList() });
 
             _programExecutor.ExecuteProgramAsync(
                 _deviceStorageService.Get()!, program!).ContinueWith(task=>{
@@ -122,5 +134,41 @@ namespace PV6900.Wpf.ViewModels
             GC.SuppressFinalize(this);
         }
 
+
+        private async ValueTask ExportProgramAsync()
+        {
+            SaveFileDialog saveFileDialog = new() { Title = "Export Program File:" };
+            saveFileDialog.DefaultExt = ".json";
+            saveFileDialog.AddExtension = true;
+            saveFileDialog.ShowDialog();
+            string? filePath = saveFileDialog.FileName;
+
+            if (filePath is not null)
+            {
+                ManagedProgram program = new()
+                {
+                    OuterLoopCount = OuterLoopCount,
+                    ManagedProgramSteps = ManagedProgramSteps.ToList()
+                };
+                using Stream stream = File.OpenWrite(filePath);
+                await JsonSerializer.SerializeAsync(stream, program,new() { WriteIndented=true});
+            }
+        }
+        private async ValueTask ImportProgramAsync()
+        {
+            OpenFileDialog openFileDialog = new() { Title="Select Program File:" };
+            openFileDialog.ShowDialog();
+            string filePath = openFileDialog.FileName;
+
+            if (File.Exists(filePath))
+            {
+                using Stream stream = File.OpenRead(filePath);
+                ManagedProgram managedProgram = (await JsonSerializer.DeserializeAsync<ManagedProgram>(stream))!;
+                OuterLoopCount = managedProgram.OuterLoopCount;
+                ManagedProgramSteps.Clear();
+                ManagedProgramSteps.AddRange(managedProgram.ManagedProgramSteps);
+            }
+
+        }
     }
 }

@@ -147,6 +147,19 @@
                             Command="{Binding StopCommand}"
                             IsEnabled="{Binding InRunning}"
                             />
+
+                        <Button Margin="24,0,0,0"
+                                Style="{DynamicResource MaterialDesignRaisedButton}"
+                            Content="Import" 
+                            Command="{Binding ImportProgramCommand}"
+                            IsEnabled="{Binding InRunning,Converter={StaticResource boolNegateConverter}}"
+                            />
+                        <Button Margin="8,0,0,0"
+                                Style="{DynamicResource MaterialDesignOutlinedButton}"
+                            Content="Export" 
+                            Command="{Binding ExportProgramCommand}"
+                            IsEnabled="{Binding InRunning,Converter={StaticResource boolNegateConverter}}"
+                            />
                     </StackPanel>
                     <Border BorderBrush="Black" BorderThickness="0.5"  CornerRadius="16"
                             Margin="24 32 0 0"
