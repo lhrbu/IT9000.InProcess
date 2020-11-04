@@ -9,6 +9,14 @@
         mc:Ignorable="d"
         Height="400">
     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+        <!--<syncfusion:FastLineBitmapSeries ItemsSource="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:TimeSpanCharts},Path=TimeSpanVoltaChartDataContext}"
+                                         XBindingPath="TimeSpan"
+                                        YBindingPath="Volta"
+                                         ListenPropertyChange="True">
+            
+        </syncfusion:FastLineBitmapSeries>-->
+        
+        
         <syncfusion:SfChart Margin="4" Height="300"
                             Header="Real Time Volta"
                             DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:TimeSpanCharts},Path=TimeSpanVoltaChartDataContext}">
@@ -22,13 +30,13 @@
                         PlotOffsetEnd="10" Header="Volta(V)">
                 </syncfusion:NumericalAxis>
             </syncfusion:SfChart.SecondaryAxis>
-            <syncfusion:LineSeries 
-                
+            <syncfusion:FastLineBitmapSeries 
+                                        EnableAntiAliasing="True"
                                        ItemsSource="{Binding Points}"
                                        XBindingPath="TimeSpan"
                                        YBindingPath="Volta"
                                        ListenPropertyChange="True">
-            </syncfusion:LineSeries>
+            </syncfusion:FastLineBitmapSeries>
         </syncfusion:SfChart>
 
         <syncfusion:SfChart 
@@ -44,13 +52,13 @@
                                               Minimum="0" Maximum="30">
                 </syncfusion:NumericalAxis>
             </syncfusion:SfChart.SecondaryAxis>
-            <syncfusion:LineSeries      
-                
+            <syncfusion:FastLineBitmapSeries       
+                                        EnableAntiAliasing="True"
                                        ItemsSource="{Binding Points}"
                                        XBindingPath="TimeSpan"
                                        YBindingPath="Ampere"
                                        ListenPropertyChange="True">
-            </syncfusion:LineSeries>
+            </syncfusion:FastLineBitmapSeries>
         </syncfusion:SfChart>
     </StackPanel>
 </Grid>

@@ -48,13 +48,13 @@ namespace PV6900.Wpf.Services
             _ =MonitorRunningStatusAsync(_cancellationTokenSource.Token)
                 .ConfigureAwait(false);
 
-            OuterLoopCountChanged?.Invoke(device, new(program.LoopCount));
+            OuterLoopCountChanged?.Invoke(device, new(program.OuterLoopCount));
             ProgramDurationChanged?.Invoke(device, new(TimeSpan.FromSeconds(
-                program.ProgramStepsWithSourceMap.Sum(item => item.ProgramStep.Duration))));
+                program.OuterLoopCount * program.ProgramStepsWithSourceMap.Sum(item => item.ProgramStep.Duration))));
 
             bool intoInnerLoop = false;
             
-            foreach (int outerLoopIndex in Enumerable.Range(0,program.LoopCount))
+            foreach (int outerLoopIndex in Enumerable.Range(0,program.OuterLoopCount))
             {
                 OuterLoopCurrentChanged?.Invoke(device, new(outerLoopIndex + 1));
 

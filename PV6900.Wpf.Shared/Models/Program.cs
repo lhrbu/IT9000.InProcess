@@ -8,7 +8,7 @@ namespace PV6900.Wpf.Shared.Models
 {
     public record Program
     {
-        public int LoopCount { get; init; } = 1;
+        public int OuterLoopCount { get; init; } = 1;
         public List<ProgramStepWithSourceMap> ProgramStepsWithSourceMap { get; init; } = null!;
     }
 }

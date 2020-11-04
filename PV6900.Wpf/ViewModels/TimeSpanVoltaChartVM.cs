@@ -37,7 +37,7 @@ namespace PV6900.Wpf.ViewModels
                 TimeSpan = (long)(DateTimeOffset.Now - _startTime).TotalSeconds,
                 Volta = volta
             };
-            if (Points.Count() <= 60)
+            if (Points.Count() <= 100)
             {
                 Points.Add(point);
             }

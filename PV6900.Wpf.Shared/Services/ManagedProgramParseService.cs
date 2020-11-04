@@ -72,7 +72,7 @@ namespace PV6900.Wpf.Shared.Services
 
             return new Program
             {
-                LoopCount = managedProgram.OuterLoopCount,
+                OuterLoopCount = managedProgram.OuterLoopCount,
                 ProgramStepsWithSourceMap = programSteps
             };
         }
