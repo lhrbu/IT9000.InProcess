@@ -9,16 +9,9 @@
         mc:Ignorable="d"
         Height="400">
     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-        <!--<syncfusion:FastLineBitmapSeries ItemsSource="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:TimeSpanCharts},Path=TimeSpanVoltaChartDataContext}"
-                                         XBindingPath="TimeSpan"
-                                        YBindingPath="Volta"
-                                         ListenPropertyChange="True">
-            
-        </syncfusion:FastLineBitmapSeries>-->
-        
-        
         <syncfusion:SfChart Margin="4" Height="300"
                             Header="Real Time Volta"
+                            x:Name="Chart_Ampere"
                             DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:TimeSpanCharts},Path=TimeSpanVoltaChartDataContext}">
             <syncfusion:SfChart.PrimaryAxis>
                 <syncfusion:NumericalAxis PlotOffsetEnd="10" Header="Time(s)">
@@ -42,7 +35,9 @@
         <syncfusion:SfChart 
             DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:TimeSpanCharts},Path=TimeSpanAmpereChartDataContext}"
                                 Margin="4" Height="300"
-                                Header="Real Time Ampere">
+                                Header="Real Time Ampere"
+            x:Name="Chart_Volta"
+            >
             <syncfusion:SfChart.PrimaryAxis>
                 <syncfusion:NumericalAxis PlotOffsetEnd="10" Header="Time(s)">
                 </syncfusion:NumericalAxis>

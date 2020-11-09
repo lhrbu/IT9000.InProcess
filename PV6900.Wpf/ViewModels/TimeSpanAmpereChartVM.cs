@@ -33,10 +33,10 @@ namespace PV6900.Wpf.ViewModels
         {
             TimeSpanAmperePoint point = new()
             {
-                TimeSpan = (long)(DateTimeOffset.Now - _startTime).TotalSeconds,
+                TimeSpan = (DateTimeOffset.Now - _startTime).TotalMilliseconds / 1000,
                 Ampere = ampere
             };
-            if (Points.Count() <= 100)
+            if (Points.Count() <= 50)
             {
                 Points.Add(point);
             }

@@ -193,6 +193,7 @@
         </Grid>
 
         <controls:TimeSpanCharts Grid.Row="2" HorizontalAlignment="Center"
+                                 x:Name="Chart_TimeSpan"
             TimeSpanVoltaChartDataContext="{Binding TimeSpanVoltaChartVM}"
             TimeSpanAmpereChartDataContext="{Binding TimeSpanAmpereChartVM}">
         </controls:TimeSpanCharts>

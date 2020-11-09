@@ -34,10 +34,10 @@ namespace PV6900.Wpf.ViewModels
         {
             TimeSpanVoltaPoint point = new()
             {
-                TimeSpan = (long)(DateTimeOffset.Now - _startTime).TotalSeconds,
+                TimeSpan = (DateTimeOffset.Now - _startTime).TotalMilliseconds / 1000,
                 Volta = volta
             };
-            if (Points.Count() <= 100)
+            if (Points.Count() <= 50)
             {
                 Points.Add(point);
             }

@@ -1,5 +1,6 @@
 ﻿using IT9000.Wpf.Shared.Models;
 using Prism.Mvvm;
+using PV6900.Wpf.Services;
 using PV6900.Wpf.Shared.Services;
 using PV6900.Wpf.ViewModels;
 using System;
@@ -24,11 +25,14 @@ namespace PV6900.Wpf
     public partial class PV6900Window : Grid
     {
         public PV6900Window(
-            PV6900WindowVM pv6900WindowVM
+            PV6900WindowVM pv6900WindowVM,
+            DeviceMonitorService deviceMonitorService
             )
         {
             InitializeComponent();
             DataContext = pv6900WindowVM;
+            deviceMonitorService.BeforeFetchPoint += (sender, e) => Chart_TimeSpan.ResumeDataUpdate();
+            deviceMonitorService.AfterFetchPoint += (sender, e) => Chart_TimeSpan.SuspendDataUpdate();
         }
     }
 }

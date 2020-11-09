@@ -34,11 +34,12 @@ namespace PV6900.Wpf.Services
             _settingDataQueryService = settingDataQueryService;
         }
 
-
+        public event EventHandler? BeforeFetchPoint;
         public event EventHandler<SettingDataQueryEventArgs>? AfterSettingDataQuery;
         public event EventHandler<DataMeasureEventArgs>? AfterDataMeasure;
-
-        public int IntervalMS { get; init; } = 100;
+        public event EventHandler? AfterFetchPoint;
+        private readonly EventArgs _dummyArgs = new();
+        public int IntervalMS { get; init; } = 300;
 
         private CancellationTokenSource? _cancellationTokenSource;
 
@@ -61,11 +62,14 @@ namespace PV6900.Wpf.Services
                 double volta = _measureService.GetVoltaUnsafe(device);
                 double ampere = _measureService.GetAmpereUnsafe(device);
                 _iteInteropService.WaitHandle.Set();
-
+                BeforeFetchPoint?.Invoke(device, _dummyArgs);
+                
                 AfterSettingDataQuery?.Invoke(device, new SettingDataQueryEventArgs
                 { SettingVolta = settingVolta, SettingAmpere = settingAmpere });
                 AfterDataMeasure?.Invoke(device, new DataMeasureEventArgs
                 { Volta = volta, Ampere = ampere });
+
+                AfterFetchPoint?.Invoke(device, _dummyArgs);
                 await Task.Delay(IntervalMS);
             }
         }

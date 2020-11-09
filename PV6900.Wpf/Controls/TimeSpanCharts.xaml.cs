@@ -1,4 +1,5 @@
 ﻿using PV6900.Wpf.ViewModels;
+using Syncfusion.UI.Xaml.Charts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,16 @@ namespace PV6900.Wpf.Controls
 {
     public partial class TimeSpanCharts : Grid
     {
+        public void SuspendDataUpdate()
+        {
+            Chart_Ampere.SuspendSeriesNotification();
+            Chart_Volta.SuspendSeriesNotification();
+        }
+        public void ResumeDataUpdate()
+        {
+            Chart_Ampere.ResumeSeriesNotification();
+            Chart_Volta.ResumeSeriesNotification();
+        }
         public TimeSpanCharts()
         {
             InitializeComponent();
