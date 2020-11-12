@@ -21,6 +21,7 @@ namespace PV6900.Wpf
 {
     public class PV6900DevicePanelFactory:IDevicePanelFactory
     {
+        //static void Main() { }
         public IDevicePanel CreateDevicePanel(Device device)
         { 
             Initialize();

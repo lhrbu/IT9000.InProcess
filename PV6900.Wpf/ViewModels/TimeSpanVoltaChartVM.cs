@@ -7,11 +7,22 @@ using System.Text;
 using System.Threading.Tasks;
 using PV6900.Wpf.Services;
 using PV6900.Wpf.Shared.Models;
+using System.Windows;
+using LiveCharts;
+using LiveCharts.Configurations;
 
 namespace PV6900.Wpf.ViewModels
 {
     public class TimeSpanVoltaChartVM
     {
+        static TimeSpanVoltaChartVM()
+        {
+            var mapper = Mappers.Xy<TimeSpanVoltaPoint>()
+                .X(item => item.TimeSpan)
+                .Y(item => item.Volta);
+            Charting.For<TimeSpanVoltaPoint>(mapper);
+        }
+
         private readonly DeviceMonitorService _deviceMonitorService;
         private readonly EventHandler<DataMeasureEventArgs> _onMeasured;
         public TimeSpanVoltaChartVM(DeviceMonitorService deviceMonitorService)
@@ -23,7 +34,7 @@ namespace PV6900.Wpf.ViewModels
 
 
         private DateTimeOffset _startTime = DateTimeOffset.Now;
-        public ObservableCollection<TimeSpanVoltaPoint> Points { get; }= new();
+        public ChartValues<TimeSpanVoltaPoint> Points { get; } = new();
         public void Reset()
         {
             Points.Clear();
@@ -32,20 +43,19 @@ namespace PV6900.Wpf.ViewModels
 
         public void FetchPoint(double volta)
         {
+            double timeSpan = (DateTimeOffset.Now - _startTime).TotalMilliseconds / 1000;
             TimeSpanVoltaPoint point = new()
             {
-                TimeSpan = (DateTimeOffset.Now - _startTime).TotalMilliseconds / 1000,
+                TimeSpan = timeSpan,
                 Volta = volta
             };
-            if (Points.Count() <= 50)
-            {
-                Points.Add(point);
-            }
-            else
+            
+            if(Points.Count()>=25)
             {
                 Points.RemoveAt(0);
-                Points.Add(point);
             }
+            Points.Add(point);
+            
         }
 
         private bool _disposed = false;

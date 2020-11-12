@@ -21,7 +21,6 @@ using System.Text.Json;
 using Microsoft.Win32;
 using Syncfusion.Windows.Tools.Controls;
 using Prism.Services.Dialogs;
-using PV6900.Wpf.Views;
 
 namespace PV6900.Wpf.ViewModels
 {

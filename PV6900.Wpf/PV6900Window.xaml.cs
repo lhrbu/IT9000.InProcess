@@ -31,8 +31,8 @@ namespace PV6900.Wpf
         {
             InitializeComponent();
             DataContext = pv6900WindowVM;
-            deviceMonitorService.BeforeFetchPoint += (sender, e) => Chart_TimeSpan.ResumeDataUpdate();
-            deviceMonitorService.AfterFetchPoint += (sender, e) => Chart_TimeSpan.SuspendDataUpdate();
+            //deviceMonitorService.BeforeFetchPoint += (sender, e) => Chart_TimeSpan.ResumeDataUpdate();
+            //deviceMonitorService.AfterFetchPoint += (sender, e) => Chart_TimeSpan.SuspendDataUpdate();
         }
     }
 }

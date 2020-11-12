@@ -183,8 +183,8 @@
 
                             <controls:StatusBar Margin="0 8" MinHeight="32" 
                                 Header="Total running time(s):" 
-                                CurrentValue="{Binding RunningTimeSpan,StringFormat=hh\\:mm\\:ss}"
-                                TotalValue="{Binding ProgramDuration,StringFormat=hh\\:mm\\:ss}"/>
+                                CurrentValue="{Binding RunningTimeSpan,StringFormat=dd\\-hh\\:mm\\:ss}"
+                                TotalValue="{Binding ProgramDuration,StringFormat=dd\\-hh\\:mm\\:ss}"/>
 
 
                         </StackPanel>
@@ -192,12 +192,17 @@
                 </StackPanel>
         </Grid>
 
-        <controls:TimeSpanCharts Grid.Row="2" HorizontalAlignment="Center"
+        <!--<controls:TimeSpanCharts Grid.Row="2" HorizontalAlignment="Center"
                                  x:Name="Chart_TimeSpan"
             TimeSpanVoltaChartDataContext="{Binding TimeSpanVoltaChartVM}"
             TimeSpanAmpereChartDataContext="{Binding TimeSpanAmpereChartVM}">
-        </controls:TimeSpanCharts>
-
+        </controls:TimeSpanCharts>-->
+        <controls:TimeSpanLiveChart Grid.Row="2" HorizontalAlignment="Center"
+                                    Margin="0 20 0 0"
+                            TimeSpanVoltaChartDataContext="{Binding TimeSpanVoltaChartVM}"
+                            TimeSpanAmpereChartDataContext="{Binding TimeSpanAmpereChartVM}">
+                
+        </controls:TimeSpanLiveChart>
         
     </Grid>
 

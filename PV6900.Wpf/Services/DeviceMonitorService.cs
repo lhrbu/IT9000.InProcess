@@ -39,7 +39,7 @@ namespace PV6900.Wpf.Services
         public event EventHandler<DataMeasureEventArgs>? AfterDataMeasure;
         public event EventHandler? AfterFetchPoint;
         private readonly EventArgs _dummyArgs = new();
-        public int IntervalMS { get; init; } = 300;
+        public int IntervalMS { get; init; } = 400;
 
         private CancellationTokenSource? _cancellationTokenSource;
 

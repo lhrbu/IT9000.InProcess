@@ -7,11 +7,21 @@ using System.Text;
 using System.Threading.Tasks;
 using PV6900.Wpf.Services;
 using PV6900.Wpf.Shared.Models;
+using LiveCharts;
+using LiveCharts.Configurations;
 
 namespace PV6900.Wpf.ViewModels
 {
     public class TimeSpanAmpereChartVM:IDisposable
     {
+        static TimeSpanAmpereChartVM()
+        {
+            var mapper = Mappers.Xy<TimeSpanAmperePoint>()
+               .X(item => item.TimeSpan)
+               .Y(item => item.Ampere);
+            Charting.For<TimeSpanAmperePoint>(mapper);
+        }
+
         private readonly DeviceMonitorService _deviceMonitorService;
         private readonly EventHandler<DataMeasureEventArgs> _onMeaured;
         public TimeSpanAmpereChartVM(DeviceMonitorService deviceMonitorService)
@@ -22,7 +32,7 @@ namespace PV6900.Wpf.ViewModels
             _deviceMonitorService.AfterDataMeasure+= _onMeaured;
         }
         private DateTimeOffset _startTime = DateTimeOffset.Now;
-        public ObservableCollection<TimeSpanAmperePoint> Points { get; } = new();
+        public ChartValues<TimeSpanAmperePoint> Points { get; } = new();
         public void Reset()
         {
             Points.Clear();
@@ -36,15 +46,12 @@ namespace PV6900.Wpf.ViewModels
                 TimeSpan = (DateTimeOffset.Now - _startTime).TotalMilliseconds / 1000,
                 Ampere = ampere
             };
-            if (Points.Count() <= 50)
-            {
-                Points.Add(point);
-            }
-            else
+
+            if (Points.Count() >= 25)
             {
                 Points.RemoveAt(0);
-                Points.Add(point);
             }
+            Points.Add(point);
         }
 
         private bool _disposed = false;
