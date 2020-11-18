@@ -11,13 +11,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+	  <PackageReference Include="Panuon.UI.Silver" Version="1.1.3" />
     <PackageReference Include="LiveCharts.Wpf.NetCore3" Version="0.9.7" />
-    <PackageReference Include="MaterialDesignThemes" Version="4.0.0-ci2156" />
     <PackageReference Include="Prism.Wpf" Version="8.0.0.1850-pre" />
     <PackageReference Include="Raccoon.DevKits.Wpf.DependencyInjection" Version="1.2.0" />
-    <PackageReference Include="Syncfusion.SfChart.WPF" Version="18.3.0.40" />
-    <PackageReference Include="Syncfusion.Shared.WPF" Version="18.3.0.40" />
-    <PackageReference Include="Syncfusion.Tools.WPF" Version="18.3.0.40" />
   </ItemGroup>
 
   <ItemGroup>

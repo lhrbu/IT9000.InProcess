@@ -9,16 +9,7 @@
         xmlns:pv6900sharedmodels="clr-namespace:PV6900.Wpf.Shared.Models;assembly=PV6900.Wpf.Shared"
         xmlns:pv6900sharedservices="clr-namespace:PV6900.Wpf.Shared.Services;assembly=PV6900.Wpf.Shared"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
-        
-        
-        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-        TextElement.FontWeight="Regular"
-        TextElement.FontSize="13"
-        TextOptions.TextFormattingMode="Ideal" 
-        TextOptions.TextRenderingMode="Auto"        
-        Background="{DynamicResource MaterialDesignPaper}"
-        
+        xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver"  
         
         mc:Ignorable="d"
         MinHeight="600" MinWidth="800" MaxWidth="1200">
@@ -31,116 +22,120 @@
     </Grid.Resources>
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
-    <Grid VerticalAlignment="Top">
-        <Grid.Resources>
-            <it9000sharedservices:BoolNegateConverter x:Key="boolNegateConverter" />
-            <pv6900sharedservices:InnerLoopFlagBoolConverter x:Key="innerLoopFlagBoolConverter" />
+        <Grid VerticalAlignment="Top">
+            <Grid.Resources>
+                <it9000sharedservices:BoolNegateConverter x:Key="boolNegateConverter" />
+                <pv6900sharedservices:InnerLoopFlagBoolConverter x:Key="innerLoopFlagBoolConverter" />
                 <pv6900sharedservices:InnerLoopCountTextConverter x:Key="innerLoopCountTextConverter" />
-            <ObjectDataProvider MethodName="GetNames" ObjectType="{x:Type sys:Enum}" 
+                <!--<ObjectDataProvider MethodName="GetNames" ObjectType="{x:Type sys:Enum}" 
                             x:Key="InnerLoopFlagEnums">
-                <ObjectDataProvider.MethodParameters>
-                    <x:Type TypeName="pv6900sharedmodels:InnerLoopFlag" />
-                </ObjectDataProvider.MethodParameters>
-            </ObjectDataProvider>
-        </Grid.Resources>
+                    <ObjectDataProvider.MethodParameters>
+                        <x:Type TypeName="pv6900sharedmodels:InnerLoopFlag" />
+                    </ObjectDataProvider.MethodParameters>
+                </ObjectDataProvider>-->
+            </Grid.Resources>
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="1*"/>
-            <RowDefinition Height="10*"/>
-            <RowDefinition Height="10*"/>
-            <RowDefinition Height="1*" />
-        </Grid.RowDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="10*"/>
+                <RowDefinition Height="10*"/>
+                <RowDefinition Height="1*" />
+            </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0" VerticalAlignment="Center">
-            <Menu Style="{DynamicResource MaterialDesignMenu}" Grid.Row="0"
-                Foreground="{DynamicResource PrimaryHueDarkBrush}"
-                Background="{DynamicResource MaterialDesignTextFieldBoxHoverBackground}"
+            <Menu Grid.Row="0" HorizontalAlignment="Center" 
+                  Height="40"
+                  Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Grid},Path=ActualWidth}"
                 DataContext="{Binding MonitorMenuVM}">
-                <MenuItem Style="{DynamicResource MaterialDesignMenuItem}" Header="Start" 
+                <MenuItem Header="Start" FontSize="16" Width="64"
                           Command="{Binding StartMonitorCommand}"
                           IsEnabled="{Binding InMonitor,Converter={StaticResource boolNegateConverter}}"/>
-                <MenuItem Style="{DynamicResource MaterialDesignMenuItem}" Header="Stop"
+                <MenuItem Header="Stop" FontSize="16" Width="64"
                           Command="{Binding StopMonitorCommand}"
                           IsEnabled="{Binding InMonitor}"
                           />
             </Menu>
-        </StackPanel>
 
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*"/>
-                <ColumnDefinition Width="4*"/>
-            </Grid.ColumnDefinitions>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="4*"/>
+                </Grid.ColumnDefinitions>
 
-            <StackPanel Grid.Column="0" DataContext="{Binding TimeSpanGaugesVM}" VerticalAlignment="Center">
-                <controls:Gauge Header="Setting Volta  :" Value="{Binding SettingVolta,StringFormat={}{0:N2}}"/>
-                <controls:Gauge Header="Volta          :" Value="{Binding Volta,StringFormat={}{0:N2}}"/>
-                <controls:Gauge Margin="0,12,0,0" Header="Setting Ampere :" 
+                <Grid Grid.Column="0" DataContext="{Binding TimeSpanGaugesVM}" VerticalAlignment="Center"
+                      Background="#fefefe" Margin="12">
+                    <Grid.Effect>
+                        <DropShadowEffect ShadowDepth="-4" BlurRadius="8" Color="LightGray"/>
+                    </Grid.Effect>
+                    <StackPanel Margin="0 16">
+                        <controls:Gauge Header="Setting Volta  :" Value="{Binding SettingVolta,StringFormat={}{0:N2}}"/>
+                        <controls:Gauge Header="Volta          :" Value="{Binding Volta,StringFormat={}{0:N2}}"/>
+                        <controls:Gauge Margin="0,12,0,0" Header="Setting Ampere :" 
                                                         Value="{Binding SettingAmpere,StringFormat={}{0:N2}}"/>
-                <controls:Gauge Header="Ampere         :" Value="{Binding Ampere,StringFormat={}{0:N2}}"/>
-            </StackPanel>
+                        <controls:Gauge Header="Ampere         :" Value="{Binding Ampere,StringFormat={}{0:N2}}"/>
+                    </StackPanel>
+                </Grid>
 
                 <StackPanel  DataContext="{Binding ProgramDashboardVM}" Margin="32 4" Grid.Column="1"
+                             
                         >
                     <DataGrid ItemsSource="{Binding ManagedProgramSteps}"
+                              Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=StackPanel},Path=ActualWidth}"
                             CanUserAddRows="False"
+                            HorizontalAlignment="Left"
                             CanUserDeleteRows="False"
                             AutoGenerateColumns="False"
                             CanUserSortColumns="False"
                             IsReadOnly="{Binding InRunning}"
                             Name="DataGrid_ProgramEditor">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Volta" Binding="{Binding Volta}" Width="*"/>
-                            <DataGridTextColumn Header="Ampere" Binding="{Binding Ampere}" Width="*" />
-                            <DataGridTextColumn Header="Duration" Binding="{Binding Duration}" Width="*"/>
-                            <DataGridComboBoxColumn Header="Inner loop type"  ItemsSource="{Binding Source={StaticResource InnerLoopFlagEnums}}" 
-                                                TextBinding="{Binding InnerLoopFlag,UpdateSourceTrigger=PropertyChanged}"/>
-                            <DataGridTextColumn Header="In.Loop Count" Binding="{Binding InnerLoopCount,Converter={StaticResource innerLoopCountTextConverter}}"
-                                                >
-                               
-                            </DataGridTextColumn>
-
-                            <!--<DataGridTemplateColumn Header="Inner Loop Count">
+                            <DataGridTextColumn Header="Volta" Binding="{Binding Volta}"  Width="1*"/>
+                            <DataGridTextColumn Header="Ampere" Binding="{Binding Ampere}"  Width="1*"/>
+                            <DataGridTextColumn Header="Duration" Binding="{Binding Duration}" Width="1*"/>
+                            <!--ItemsSource="{Binding Source={StaticResource InnerLoopFlagEnums}}"-->
+                            <DataGridTemplateColumn Header="Inner loop type" Width="1*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <DataTemplate.Triggers>
-                                            <DataTrigger Binding="{Binding InnerLoopFlag,Converter={StaticResource innerLoopFlagBoolConverter}}"
-                                                         Value="True">
-                                                <Setter Property="IsEnabled" Value="True" />
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding InnerLoopFlag,Converter={StaticResource innerLoopFlagBoolConverter}}"
-                                                         Value="False">
-                                                <Setter Property="IsEnabled" Value="False" />
-                                            </DataTrigger>
-                                        </DataTemplate.Triggers>
-                                        <TextBox Text="{Binding InnerLoopCount}" 
-                                               
-                                               BorderThickness="0" />
+                                        <ComboBox Height="26" pu:ComboBoxHelper.BindToEnum="{x:Static pv6900sharedmodels:InnerLoopFlag.None}"
+                                               SelectedValue="{Binding InnerLoopFlag,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                                  />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>-->
+                            </DataGridTemplateColumn>
                             
+                            <!--<DataGridComboBoxColumn Header="Inner loop type"   
+                                                TextBinding="{Binding InnerLoopFlag}"  Width="1*"
+                                                    pu:ComboBoxHelper.BindToEnum="{x:Static pv6900sharedmodels:InnerLoopFlag.None}"
+                                                    />-->
+                            <DataGridTextColumn Header="In.Loop Count" Binding="{Binding InnerLoopCount,Converter={StaticResource innerLoopCountTextConverter}}"
+                                               Width="1*"/>
+
                         </DataGrid.Columns>
                     </DataGrid>
+
                     <StackPanel Orientation="Horizontal" Margin="0,32,0,0">
-                        <Button Content="Add" Command="{Binding AddCommand}" />
-                        <Button Content="Delete" Style="{DynamicResource MaterialDesignOutlinedButton}" Margin="8,0"
+                        <Button Style="{StaticResource puProgramEditorButton}" Background="Blue"
+                            Content="Add" Command="{Binding AddCommand}" 
+                                IsEnabled="{Binding InRunning,Converter={StaticResource boolNegateConverter}}"/>
+                        <Button Style="{StaticResource puProgramEditorButton}" Background="Brown"
+                            Content="Delete"
                             Command="{Binding DeleteCommand}" 
-                            CommandParameter="{Binding ElementName=DataGrid_ProgramEditor}"/>
+                            CommandParameter="{Binding ElementName=DataGrid_ProgramEditor}"
+                                IsEnabled="{Binding InRunning,Converter={StaticResource boolNegateConverter}}"/>
 
                         <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
                             <Label Content="Outer loop count:" />
-                            <TextBox Text="{Binding OuterLoopCount,UpdateSourceTrigger=PropertyChanged}" />
+                            <TextBox pu:TextBoxHelper.FocusedShadowColor="AliceBlue" MinWidth="32"
+                                Text="{Binding OuterLoopCount,UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
 
-                        <Button Margin="24,0,0,0"
+                        <Button Margin="24,0,0,0" Style="{StaticResource puProgramEditorButton}"
                                 x:Name="Button_StartRunProgram"
                             Content="Run" Background="Green" 
                             Command="{Binding StartCommand}"
                             CommandParameter="{Binding ElementName=DataGrid_ProgramEditor}"
                             IsEnabled="{Binding InRunning,Converter={StaticResource boolNegateConverter}}"
                             />
-                        <Button Content="Stop" 
+                        <Button Content="Stop" Style="{StaticResource puProgramEditorButton}"
                                 x:Name="Button_StopRunProgram"
                             Margin="8,0"
                             Background="Red" 
@@ -149,14 +144,14 @@
                             />
 
                         <Button Margin="24,0,0,0"
-                                Style="{DynamicResource MaterialDesignRaisedButton}"
-                            Content="Import" 
+                                
+                            Content="Import"  Style="{StaticResource puProgramEditorButton}" Background="Gray"
                             Command="{Binding ImportProgramCommand}"
                             IsEnabled="{Binding InRunning,Converter={StaticResource boolNegateConverter}}"
                             />
                         <Button Margin="8,0,0,0"
-                                Style="{DynamicResource MaterialDesignOutlinedButton}"
-                            Content="Export" 
+                                
+                            Content="Export"  Style="{StaticResource puProgramEditorButton}" Background="Gray"
                             Command="{Binding ExportProgramCommand}"
                             IsEnabled="{Binding InRunning,Converter={StaticResource boolNegateConverter}}"
                             />
@@ -190,21 +185,17 @@
                         </StackPanel>
                     </Border>
                 </StackPanel>
-        </Grid>
+            </Grid>
 
-        <!--<controls:TimeSpanCharts Grid.Row="2" HorizontalAlignment="Center"
-                                 x:Name="Chart_TimeSpan"
-            TimeSpanVoltaChartDataContext="{Binding TimeSpanVoltaChartVM}"
-            TimeSpanAmpereChartDataContext="{Binding TimeSpanAmpereChartVM}">
-        </controls:TimeSpanCharts>-->
-        <controls:TimeSpanLiveChart Grid.Row="2" HorizontalAlignment="Center"
-                                    Margin="0 20 0 0"
+
+            <controls:TimeSpanLiveChart Grid.Row="2" HorizontalAlignment="Center"
+                                    Margin="0 32 0 0"
                             TimeSpanVoltaChartDataContext="{Binding TimeSpanVoltaChartVM}"
                             TimeSpanAmpereChartDataContext="{Binding TimeSpanAmpereChartVM}">
-                
-        </controls:TimeSpanLiveChart>
-        
-    </Grid>
+
+            </controls:TimeSpanLiveChart>
+
+        </Grid>
 
     </ScrollViewer>
 </Grid>

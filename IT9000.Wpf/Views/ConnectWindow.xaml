@@ -4,30 +4,39 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespaceIT9000.Wpf.Views"
-        xmlns:controls="clr-namespace:IT9000.Wpf.Controls"
+        xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
         mc:Ignorable="d"
         
-        Title="Offline Device List" Height="400" Width="300"
-        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-        TextElement.FontWeight="Regular"
-        TextElement.FontSize="13"
-        TextOptions.TextFormattingMode="Ideal" 
-        TextOptions.TextRenderingMode="Auto"        
-        Background="{DynamicResource MaterialDesignPaper}"
-        FontFamily="{DynamicResource MaterialDesignFont}">
+        Title="Offline Device List" Height="400" Width="300">
     <StackPanel>
-        <controls:DevicesList   x:Name="ListBox_Devices"
-               ItemsSource="{Binding OfflineDevices}" IconBrush="Red"></controls:DevicesList>
-        
-        <StackPanel Orientation="Horizontal" Margin="12px,32px,0,0" 
+        <ListBox ItemsSource="{Binding OfflineDevices}" x:Name="ListBox_Devices"
+                 SelectionMode="Multiple" Margin="8 16 8 0">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal" Margin="8 4">
+                        <iconPacks:PackIconMaterialDesign Kind="Layers" Width="13"  Height="13" Margin="0 0 8 0"
+                                                          Foreground="CornflowerBlue"
+                                                          VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding Name}"></TextBlock>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="96px,0,48px,0">
+                            <iconPacks:PackIconMaterialDesign Kind="RssFeed" Width="13"  Height="13"
+                                                Foreground="Red"
+                                              VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+            <StackPanel Orientation="Horizontal" Margin="12px,24px,0,0" 
                     Visibility="{Binding OfflineDevicesEmptyFlag}">
-            <Button Style="{DynamicResource MaterialDesignOutlinedButton}" Content="Reset" 
-                    Margin="16px 0"
+            <Button Style="{StaticResource puMenuButton}" Content="Reset"
+                    Background="Red"
                     Command="{Binding SelectionsResetCommand}"
                     CommandParameter="{Binding ElementName=ListBox_Devices}"
                     />
-            <Button Style="{DynamicResource MaterialDesignRaisedDarkButton}" Content="Connect" 
+            <Button Style="{StaticResource puMenuButton}" Content="Connect" 
+                    Background="Green"
                     Command="{Binding SelectionsConnectCommand}"
                     CommandParameter="{Binding ElementName=ListBox_Devices}"/>
         </StackPanel>

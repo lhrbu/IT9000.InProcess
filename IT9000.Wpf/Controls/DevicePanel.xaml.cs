@@ -19,7 +19,7 @@ namespace IT9000.Wpf.Controls
     /// <summary>
     /// DevicePanel.xaml 的交互逻辑
     /// </summary>
-    public partial class DevicePanel : GroupBox
+    public partial class DevicePanel : Grid
     {
         public DevicePanel()
         {

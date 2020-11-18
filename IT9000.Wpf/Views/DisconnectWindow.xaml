@@ -6,29 +6,38 @@
         xmlns:local="clr-namespace:IT9000.Wpf.Views"
         mc:Ignorable="d"
         
-        xmlns:controls="clr-namespace:IT9000.Wpf.Controls"
+        xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
         Title="Online Device List" Height="400" Width="300"
-        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-        TextElement.FontWeight="Regular"
-        TextElement.FontSize="13"
-        TextOptions.TextFormattingMode="Ideal" 
-        TextOptions.TextRenderingMode="Auto"        
-        Background="{DynamicResource MaterialDesignPaper}"
-        FontFamily="{DynamicResource MaterialDesignFont}">
+       >
     <StackPanel>
-        <controls:DevicesList   x:Name="ListBox_Devices"
-                                ItemsSource="{Binding OnlineDevices}" IconBrush="Green">
-        </controls:DevicesList>
+        <ListBox ItemsSource="{Binding OnlineDevices}" x:Name="ListBox_Devices"
+                 SelectionMode="Multiple" Margin="8 16 8 0">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal" Margin="8 4">
+                        <iconPacks:PackIconMaterialDesign Kind="Layers" Width="13"  Height="13" Margin="0 0 8 0"
+                                                          Foreground="CornflowerBlue"
+                                                          VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding Name}"></TextBlock>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="96px,0,48px,0">
+                            <iconPacks:PackIconMaterialDesign Kind="RssFeed" Width="13"  Height="13"
+                                                Foreground="Green"
+                                              VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
 
-        <StackPanel Orientation="Horizontal" Margin="12px,32px,0,0" 
+        <StackPanel Orientation="Horizontal" Margin="12px,24px,0,0" 
                     Visibility="{Binding OnlineDevicesEmptyFlag}">
-            <Button Style="{DynamicResource MaterialDesignOutlinedButton}" Content="Reset" 
-                    Margin="16px 0"
+            <Button Style="{StaticResource puMenuButton}" Content="Reset" 
+                    Background="Red"
                     Command="{Binding SelectionsResetCommand}"
                     CommandParameter="{Binding ElementName=ListBox_Devices}"
                     />
-            <Button Style="{DynamicResource MaterialDesignRaisedDarkButton}" Content="Disconnect" 
+            <Button Style="{StaticResource puMenuButton}" Content="Disconnect" 
+                    Background="Green"
                     Command="{Binding SelectionsDisconnectCommand}"
                     CommandParameter="{Binding ElementName=ListBox_Devices}"/>
         </StackPanel>

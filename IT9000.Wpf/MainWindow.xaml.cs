@@ -13,13 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using IT9000.Wpf.ViewModels;
+using Panuon.UI.Silver;
 
 namespace IT9000.Wpf
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : WindowX
     {
         public MainWindow(MainWindowVM mainWindowVM)
         {

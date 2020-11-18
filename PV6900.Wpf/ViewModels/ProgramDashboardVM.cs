@@ -19,7 +19,6 @@ using System.Windows.Threading;
 using System.IO;
 using System.Text.Json;
 using Microsoft.Win32;
-using Syncfusion.Windows.Tools.Controls;
 using Prism.Services.Dialogs;
 
 namespace PV6900.Wpf.ViewModels

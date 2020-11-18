@@ -21,7 +21,6 @@ namespace PV6900.Wpf
 {
     public class PV6900DevicePanelFactory:IDevicePanelFactory
     {
-        //static void Main() { }
         public IDevicePanel CreateDevicePanel(Device device)
         { 
             Initialize();
@@ -38,8 +37,8 @@ namespace PV6900.Wpf
         {
             if(!_initializeFlag)
             {
-                Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(
-                "MzM2ODE5QDMxMzgyZTMzMmUzMGsydzdtUHFwdmVkKzgwUUQ2Y3pXSzdRcHpIUHRPSzJjUUw0M01qcldYb1U9");
+                //Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(
+                //"MzM2ODE5QDMxMzgyZTMzMmUzMGsydzdtUHFwdmVkKzgwUUQ2Y3pXSzdRcHpIUHRPSzJjUUw0M01qcldYb1U9");
 
                 
                 IServiceCollection services = new ServiceCollection();
@@ -59,7 +58,6 @@ namespace PV6900.Wpf
             services.AddScoped<PV6900DevicePanel>();
 
             services.AddScoped<PV6900Window>();
-            services.AddScoped<TimeSpanCharts>();
 
             services.AddScoped<PV6900WindowVM>();
             services.AddScoped<TimeSpanVoltaChartVM>();

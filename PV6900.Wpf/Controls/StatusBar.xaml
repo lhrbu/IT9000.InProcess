@@ -6,13 +6,6 @@
              xmlns:local="clr-namespace:PV6900.Wpf.Controls"
              mc:Ignorable="d" 
         
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-            TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-            TextElement.FontWeight="Regular"
-            TextElement.FontSize="13"
-            TextOptions.TextFormattingMode="Ideal" 
-            TextOptions.TextRenderingMode="Auto"        
-            Background="{DynamicResource MaterialDesignPaper}"
              d:DesignHeight="100" d:DesignWidth="600">
     <Grid.ColumnDefinitions>
         <ColumnDefinition Width="5*"/>
@@ -21,17 +14,16 @@
         <ColumnDefinition Width="2*"/>
     </Grid.ColumnDefinitions>
 
-    <materialDesign:Card Grid.Column="0" Grid.ColumnSpan="4"/>
 
-    <TextBlock  Margin="16 0 0 0"
-                Grid.Column="0" VerticalAlignment="Center" Style="{DynamicResource MaterialDesignBody2TextBlock}" 
+    <TextBlock  Margin="16 0 0 0" FontSize="14"
+                Grid.Column="0" VerticalAlignment="Center" 
                Text="{Binding Header,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:StatusBar}}"/>
-    <TextBlock  Margin="16 0 0 0" Grid.Column="1" VerticalAlignment="Center" Style="{DynamicResource MaterialDesignBody2TextBlock}" 
-                HorizontalAlignment="Right"
+    <TextBlock  Margin="16 0 0 0" Grid.Column="1" VerticalAlignment="Center"
+                HorizontalAlignment="Right" FontSize="14"
                 Text="{Binding CurrentValue,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:StatusBar}}" />
-    <TextBlock   Grid.Column="2" VerticalAlignment="Center" Style="{DynamicResource MaterialDesignBody2TextBlock}"  
+    <TextBlock   Grid.Column="2" VerticalAlignment="Center"  FontSize="14"
                 HorizontalAlignment="Center" Text="/"/>
-    <TextBlock  Grid.Column="3" VerticalAlignment="Center" Style="{DynamicResource MaterialDesignBody2TextBlock}"  
+    <TextBlock  Grid.Column="3" VerticalAlignment="Center" FontSize="14"
                HorizontalAlignment="Left"
                Text="{Binding TotalValue,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:StatusBar}}"/>
 </Grid>
