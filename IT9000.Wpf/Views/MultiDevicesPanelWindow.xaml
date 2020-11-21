@@ -7,7 +7,7 @@
         xmlns:controls="clr-namespace:IT9000.Wpf.Controls"
         mc:Ignorable="d"
         
-        Title="Multi Devices List" Height="400" Width="300"
+        Title="Multi Devices List" Height="400" Width="450"
         xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
         FontFamily="{DynamicResource MaterialDesignFont}">
     <StackPanel>
@@ -20,7 +20,7 @@
                                                           Foreground="CornflowerBlue"
                                                           VerticalAlignment="Center"/>
                         <TextBlock Text="{Binding Name}"></TextBlock>
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="96px,0,48px,0">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="200px,0,48px,0">
                             <iconPacks:PackIconMaterialDesign Kind="RssFeed" Width="13"  Height="13"
                                                 Foreground="Green"
                                               VerticalAlignment="Center"/>
@@ -47,6 +47,11 @@
             <Button Style="{StaticResource puMenuButton}" Content="Stop"
                     Background="Red"
                     Command="{Binding SelectionsStopCommand}"
+                    CommandParameter="{Binding ElementName=ListBox_Devices}"/>
+
+            <Button Style="{StaticResource puMenuButton}" Content="Stop Monitor"
+                    Background="SaddleBrown"
+                    Command="{Binding SelectionsStopMonitorCommand}"
                     CommandParameter="{Binding ElementName=ListBox_Devices}"/>
         </StackPanel>
     </StackPanel>

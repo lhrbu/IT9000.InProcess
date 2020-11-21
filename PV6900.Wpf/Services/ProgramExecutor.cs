@@ -40,9 +40,22 @@ namespace PV6900.Wpf.Services
         private DateTimeOffset _startTimeOffset;
         private DateTimeOffset _currentStepStartOffset;
 
+        private void ResetStatus(Device device)
+        {
+            ProgramStepAssemblyCode stepAssemblyCode = AssemblyProgramStep(new()
+            {
+                Duration = 0,
+                Ampere = 0,
+                Volta = 0
+            });
+            ExecuteOneProgramStepAssemblyCode(device, stepAssemblyCode);
+        }
         public async Task ExecuteProgramAsync(Device device, Program program)
         {
              _cancellationTokenSource = new();
+
+            _cancellationTokenSource.Token.Register(() =>ResetStatus(device) );
+
             _startTimeOffset = DateTimeOffset.Now;
             _currentStepStartOffset = DateTimeOffset.Now;
             _ =MonitorRunningStatusAsync(_cancellationTokenSource.Token)
@@ -118,6 +131,7 @@ namespace PV6900.Wpf.Services
                 }
             }
             if (!_cancellationTokenSource.IsCancellationRequested) { _cancellationTokenSource.Cancel(); }
+            ResetStatus(device);
         }
         public ProgramStepAssemblyCode AssemblyProgramStep(ProgramStep programStep) =>
             new ProgramStepAssemblyCode
@@ -146,34 +160,6 @@ namespace PV6900.Wpf.Services
                 await Task.Delay(65,token);
             }
         }
-
-
-        //private async ValueTask CheckCancelTokenDuringWaiting(int waitTime,CancellationToken token)
-        //{
-           
-        //    while(!token.IsCancellationRequested && waitTime>0)
-        //    {
-        //        _stopwatch.Reset();
-
-        //        TimeSpan runningTime = DateTimeOffset.Now - _startTimeOffset;
-        //        AfterRunningTimeMeasured?.Invoke(this, new(runningTime));
-        //        double currentStepRunningSeconds = (DateTimeOffset.Now - _currentStepStartOffset).TotalSeconds;
-        //        AfterCurrentStepRunningSecondsMeasured?.Invoke(this, new(currentStepRunningSeconds));
-        //        int runningMS = (int)_stopwatch.ElapsedMilliseconds;
-
-        //        int tickTime = 100 + runningMS;
-        //        if (waitTime > tickTime)
-        //        {
-        //            waitTime -= (tickTime);
-        //            await Task.Delay(tickTime);
-        //        }
-        //        else { 
-        //            await Task.Delay(waitTime);
-        //            waitTime = 0;
-        //        }
-        //    }
-        //}
-
         public void StopProgram() => _cancellationTokenSource?.Cancel();
 
         

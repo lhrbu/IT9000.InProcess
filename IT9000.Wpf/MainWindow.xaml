@@ -37,14 +37,17 @@
         <Line Stretch="Fill" Stroke="LightGray" X2="1"
               Grid.Row="1"/>
 
-        <TabControl  Grid.Row="2" Margin="8,8,8,0" x:Name="TabControl_DevicePanels">
+        <TabControl  Grid.Row="2" Margin="8,8,8,0" x:Name="TabControl_DevicePanels"
+                     pu:TabControlHelper.TabControlStyle="Classic"
+                     pu:TabControlHelper.ItemPadding="8"
+                     pu:TabControlHelper.ItemHeight="30">
             <TabItem Header="Offline Devices">
                 <ListView ItemsSource="{Binding OfflineDevices}">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <controls:DevicePanel 
                                     HeaderIconBrush="Red"
-                                 Width="200"
+                                    Width="200"
                                     DeviceName="{Binding Name}"
                                     DeviceModel="{Binding Model}"
                                     DeviceAddress="{Binding Address}"
@@ -66,6 +69,7 @@
                         <DataTemplate>
                             <controls:DevicePanel
                                     HeaderIconBrush="Green"
+                                    Width="200"
                                     DeviceName="{Binding Name}"
                                     DeviceModel="{Binding Model}"
                                     DeviceAddress="{Binding Address}"

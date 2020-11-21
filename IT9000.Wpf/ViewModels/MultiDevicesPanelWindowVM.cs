@@ -26,6 +26,7 @@ namespace IT9000.Wpf.ViewModels
             SelectionsResetCommand = new(listBox => listBox.SelectedItem = null);
             SelectionsRunCommand = new(SelectionsRun);
             SelectionsStopCommand = new(SelectionsStop);
+            SelectionsStopMonitorCommand = new(SelectionsStopMonitor);
         }
 
         public ObservableCollection<Device> OnlineDevices => _devicesRepository.OnlineDevices;
@@ -35,6 +36,7 @@ namespace IT9000.Wpf.ViewModels
         public DelegateCommand<ListBox> SelectionsResetCommand { get; }
         public DelegateCommand<ListBox> SelectionsRunCommand { get; }
         public DelegateCommand<ListBox> SelectionsStopCommand { get; }
+        public DelegateCommand<ListBox> SelectionsStopMonitorCommand { get; }
 
         public void SelectionsRun(ListBox listBox)
         {
@@ -77,6 +79,26 @@ namespace IT9000.Wpf.ViewModels
             {
                 IDevicePanel devicePanel = _devicePanelsRepository.FindDevicePanel(device)!;
                 devicePanel.StopRunProgram();
+            }
+            Window.GetWindow(listBox).Close();
+        }
+
+        public void SelectionsStopMonitor(ListBox listBox)
+        {
+            IEnumerable<Device> devices = listBox.SelectedItems.Cast<Device>()!;
+            foreach (Device device in devices)
+            {
+                IDevicePanel? devicePanel = _devicePanelsRepository.FindDevicePanel(device);
+                if (devicePanel is null || (!devicePanel.CanStopMonitor()))
+                {
+                    MessageBox.Show($"{device.Name} can't stop monitor now.", "Error:");
+                    return;
+                }
+            }
+            foreach(Device device in devices)
+            {
+                IDevicePanel devicePanel = _devicePanelsRepository.FindDevicePanel(device)!;
+                devicePanel.StopMonitor();
             }
             Window.GetWindow(listBox).Close();
         }

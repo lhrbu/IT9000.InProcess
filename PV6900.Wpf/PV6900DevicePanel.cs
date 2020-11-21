@@ -65,6 +65,7 @@ namespace PV6900.Wpf
                 Application.Current.Dispatcher.Invoke(() =>
                 devicePanelWindow.Button_StopRunProgram
                     .Command.Execute(devicePanelWindow.DataGrid_ProgramEditor));
+
             }
         }
 
@@ -76,6 +77,18 @@ namespace PV6900.Wpf
                 return devicePanelWindow.Button_StopRunProgram.IsEnabled;
             }
             else { return false; }
+        }
+
+        public bool CanStopMonitor()
+        {
+            MonitorMenuVM? monitorMenuVM = Scope.ServiceProvider.GetRequiredService<MonitorMenuVM>();
+            return monitorMenuVM is not null?monitorMenuVM.InMonitor:false;
+        }
+
+        public void StopMonitor()
+        {
+            MonitorMenuVM? monitorMenuVM = Scope.ServiceProvider.GetRequiredService<MonitorMenuVM>();
+            monitorMenuVM?.StopMonitorCommand.Execute();
         }
     }
 }

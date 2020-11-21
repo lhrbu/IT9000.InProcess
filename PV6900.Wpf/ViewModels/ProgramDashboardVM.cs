@@ -109,7 +109,17 @@ namespace PV6900.Wpf.ViewModels
             InRunning = true;
         }
 
-        private void StopProgram() => _programExecutor.StopProgram();
+        private void StopProgram()
+        { 
+            _programExecutor.StopProgram();
+            //_=Task.Delay(100).ContinueWith(t =>
+            //{
+            //    if (_monitorMenuVM.InMonitor)
+            //    {
+            //        _Dispatcher.Invoke(() => _monitorMenuVM.StopMonitorCommand.Execute());
+            //    }
+            //});
+        }
 
         public ManagedProgramStep? CurrentManagedProgramStep
         {

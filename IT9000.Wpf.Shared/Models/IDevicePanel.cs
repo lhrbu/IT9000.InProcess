@@ -15,5 +15,7 @@ namespace IT9000.Wpf.Shared.Models
         bool CanRunProgram();
         void StopRunProgram();
         bool CanStopProgram();
+        bool CanStopMonitor();
+        void StopMonitor();
     }
 }
