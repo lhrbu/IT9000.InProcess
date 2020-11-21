@@ -26,6 +26,7 @@ namespace IT9000.Wpf
         {
             InitializeComponent();
             DataContext = mainWindowVM;
+            throw new ArgumentException("Test Global exception handle");
         }
     }
 }

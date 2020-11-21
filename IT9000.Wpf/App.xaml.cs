@@ -52,23 +52,25 @@ namespace IT9000.Wpf
 #endif
         }
 
+        private void GlobalExceptionHandle(object? sender,UnhandledExceptionEventArgs e)
+        {
+            Exception? exception = e.ExceptionObject as Exception;
+            if (exception is not null)
+            { MessageBox.Show(exception.ToString(), "Error");}
+        }
+
         protected override void OnStartup(StartupEventArgs e)
         {
-            try
-            {
-                base.OnStartup(e);
-                this.OnStartupProxy();
-                MainWindow mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
-                MainWindow = mainWindow;
-                mainWindow.Closed+=(sender,e)=>Application.Current.Shutdown();
-                MainWindow.Show();
+             AppDomain.CurrentDomain.UnhandledException += GlobalExceptionHandle;
+             base.OnStartup(e);
+             this.OnStartupProxy();
+             MainWindow mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
+             MainWindow = mainWindow;
+             mainWindow.Closed+=(sender,e)=>Application.Current.Shutdown();
+             MainWindow.Show();
                 //MainWindow.Show();
                 //IT9000MainWindow.Closed += (sender, e) => Application.Current.Shutdown();
-            }
-            catch(Exception exception)
-            {
-                MessageBox.Show(exception.ToString(), "Error:");
-            }
+            
         }
     }
 }
